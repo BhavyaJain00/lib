@@ -1,0 +1,78 @@
+import { Phone, Mail, MessageCircle, PhoneCall, CalendarClock, GraduationCap } from "lucide-react";
+import { SectionHeading } from "@/components/section-heading";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { CONTACT } from "@/lib/data";
+
+const STEPS = [
+  {
+    icon: PhoneCall,
+    title: "1. Call or WhatsApp us",
+    text: "Tell us which course interests you. Our counselors will answer every question — fees, timings and career paths.",
+  },
+  {
+    icon: CalendarClock,
+    title: "2. Attend a free demo class",
+    text: "Visit the institute, sit in a live class, see the labs — completely free, with no obligation to join.",
+  },
+  {
+    icon: GraduationCap,
+    title: "3. Join your batch",
+    text: "Pick a batch timing that suits you and start learning. Study materials and mentorship are included.",
+  },
+];
+
+export function Admissions() {
+  return (
+    <section id="admissions" className="py-12 sm:py-16 lg:py-24">
+      <div className="container-page">
+        <SectionHeading
+          eyebrow="Admissions"
+          title="How to Join a Course"
+          description="Enrollment is simple and personal — no online payments on this website. Contact us directly and we'll guide you from your first call to your first class."
+        />
+
+        <div className="mt-10 grid gap-6 sm:mt-12 md:grid-cols-3">
+          {STEPS.map(({ icon: Icon, title, text }) => (
+            <Card key={title} className="p-6 text-center">
+              <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <Icon className="h-6 w-6" />
+              </span>
+              <h3 className="mt-5 text-lg font-semibold">{title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{text}</p>
+            </Card>
+          ))}
+        </div>
+
+        {/* Direct contact strip */}
+        <div className="mt-10 rounded-xl border border-border bg-secondary/50 p-6 text-center sm:p-8">
+          <h3 className="text-lg font-semibold">Ready to start? Talk to us today</h3>
+          <p className="mx-auto mt-1 max-w-xl text-sm text-muted-foreground">
+            Admissions are open — reach us on any of these and we&apos;ll book
+            your free demo class.
+          </p>
+          <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Button asChild size="lg">
+              <a href={CONTACT.phoneHref}>
+                <Phone className="h-4 w-4" />
+                {CONTACT.phone}
+              </a>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer">
+                <MessageCircle className="h-4 w-4" />
+                WhatsApp Us
+              </a>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <a href={`mailto:${CONTACT.email}`}>
+                <Mail className="h-4 w-4" />
+                {CONTACT.email}
+              </a>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
