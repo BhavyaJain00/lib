@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
+import "../mobile.css";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { isAdminConfigured, getAdminEmail } from "@/lib/auth";
 

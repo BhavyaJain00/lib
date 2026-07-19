@@ -17,6 +17,10 @@ export type Course = {
   syllabus: string[];
   careers: string[];
   featured?: boolean;
+  /** Uploaded banner photo, e.g. "/uploads/1700000000-rscit.jpg". */
+  image?: string | null;
+  /** Uploaded brochure/syllabus file students can download. */
+  document?: string | null;
 };
 
 /**

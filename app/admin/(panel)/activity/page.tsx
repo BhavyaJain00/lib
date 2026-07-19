@@ -7,12 +7,10 @@ import {
   Pencil,
   Plus,
 } from "lucide-react";
-import { isDbConfigured } from "@/lib/mongodb";
 import { getActivity } from "@/lib/db";
 import {
   PageHeader,
   EmptyState,
-  DbNotice,
 } from "@/components/admin/primitives";
 import { Card } from "@/components/ui/card";
 
@@ -47,8 +45,6 @@ export default async function AdminActivityPage() {
         title="Activity"
         description="Everything that happens on the website and in this panel — queries received, courses changed, reviews added."
       />
-
-      {!isDbConfigured && <DbNotice />}
 
       {activity.length === 0 ? (
         <EmptyState

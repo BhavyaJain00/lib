@@ -85,8 +85,8 @@ export async function Hero() {
           </p>
         </div>
 
-        {/* Auto-rotating course cards */}
-        <div className="animate-fade-in lg:pl-6">
+        {/* Auto-rotating course cards — desktop only (see app/mobile.css) */}
+        <div className="hide-on-mobile animate-fade-in lg:pl-6">
           <HeroCourseSlider icons={icons} />
         </div>
       </div>

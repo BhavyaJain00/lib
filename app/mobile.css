@@ -1,0 +1,62 @@
+/* ------------------------------------------------------------------ */
+/*  Mobile responsiveness                                             */
+/*  Central home for phone/tablet-only overrides. Add mobile-specific */
+/*  rules here instead of scattering them across components, then      */
+/*  apply the helper classes below in JSX.                            */
+/*                                                                    */
+/*  "Mobile" = anything below the `lg` breakpoint (1024px), which is  */
+/*  where the site switches from stacked single-column layouts to     */
+/*  side-by-side desktop layouts. Change the 1023.98px values below   */
+/*  if you want a different cut-off (e.g. 767.98px = phones only).    */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 1023.98px) {
+  /* Fully remove an element on mobile — it isn't rendered or spaced.
+     Used by the hero course card so it only shows beside the copy on
+     desktop. These rules live outside any @layer, so they win over
+     Tailwind utility classes without needing !important. */
+  .hide-on-mobile {
+    display: none;
+  }
+
+  /* The header's dropdown menu can be taller than a short landscape
+     screen — let it scroll inside itself instead of being cut off. */
+  .mobile-nav {
+    max-height: calc(100vh - 4rem);
+    max-height: calc(100dvh - 4rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+/* ---- Phones (below Tailwind `sm`, 640px) ---------------------------- */
+@media (max-width: 639.98px) {
+  /* Floating buttons hug the phone edge (matching the 1rem page gutter)
+     and clear the iOS home-indicator bar via the safe-area inset. */
+  .whatsapp-fab {
+    right: 1rem;
+    bottom: calc(1rem + env(safe-area-inset-bottom));
+  }
+  .admin-fab {
+    right: 1rem;
+    bottom: calc(5.5rem + env(safe-area-inset-bottom));
+  }
+  .back-to-top-fab {
+    left: 1rem;
+    bottom: calc(1rem + env(safe-area-inset-bottom));
+  }
+
+  /* Hover tooltips make no sense on touch — they'd flash on tap. */
+  .fab-tip {
+    display: none;
+  }
+
+  /* "Get in Touch" heading trims down on phones (the ~ selector only
+     reaches the SectionHeading's own description, not the cards below). */
+  .contact-compact h2 {
+    font-size: 1.375rem;
+  }
+  .contact-compact h2 ~ p {
+    font-size: 0.875rem;
+  }
+}

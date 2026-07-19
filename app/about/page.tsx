@@ -25,6 +25,14 @@ export const metadata: Metadata = {
   title: "About Us",
   description:
     "Navya Computech is an ISO 9001:2015 certified computer training institute, empowering students since 2018 with practical, career-focused education.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About Navya Computech",
+    description:
+      "ISO 9001:2015 certified computer training institute, empowering students since 2018 with practical, career-focused education.",
+    url: "/about",
+    type: "website",
+  },
 };
 
 const VALUES = [

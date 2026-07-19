@@ -51,23 +51,23 @@ export function Admissions() {
             Admissions are open — reach us on any of these and we&apos;ll book
             your free demo class.
           </p>
-          <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button asChild size="lg">
+          <div className="mt-6 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+            <Button asChild size="lg" className="w-full sm:w-auto">
               <a href={CONTACT.phoneHref}>
                 <Phone className="h-4 w-4" />
                 {CONTACT.phone}
               </a>
             </Button>
-            <Button asChild size="lg" variant="outline">
+            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
               <a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer">
                 <MessageCircle className="h-4 w-4" />
                 WhatsApp Us
               </a>
             </Button>
-            <Button asChild size="lg" variant="outline">
+            <Button asChild size="lg" variant="outline" className="w-full min-w-0 sm:w-auto">
               <a href={`mailto:${CONTACT.email}`}>
                 <Mail className="h-4 w-4" />
-                {CONTACT.email}
+                <span className="truncate">{CONTACT.email}</span>
               </a>
             </Button>
           </div>

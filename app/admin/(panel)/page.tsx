@@ -7,14 +7,12 @@ import {
   Clock,
   AlertCircle,
 } from "lucide-react";
-import { isDbConfigured } from "@/lib/mongodb";
 import { getCounts, getInquiries, getActivity } from "@/lib/db";
 import {
   PageHeader,
   StatCard,
   StatusPill,
   EmptyState,
-  DbNotice,
 } from "@/components/admin/primitives";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,8 +33,6 @@ export default async function AdminOverviewPage() {
         title="Overview"
         description="A snapshot of queries, courses and everything happening on the site."
       />
-
-      {!isDbConfigured && <DbNotice />}
 
       <div className="grid gap-4 sm:grid-cols-3">
         <StatCard

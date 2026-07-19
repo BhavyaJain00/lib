@@ -31,10 +31,12 @@ const SOCIALS = [
 export function SiteFooter() {
   return (
     <footer className="border-t border-border bg-card">
-      <div className="container-page py-14">
-        <div className="grid gap-10 lg:grid-cols-4">
+      <div className="container-page py-8 sm:py-14">
+        {/* Phones: link lists pair up side by side so the footer stays short;
+            brand and contact blocks span the full width. */}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-4 lg:gap-10">
           {/* Brand */}
-          <div>
+          <div className="col-span-2 lg:col-span-1">
             <Link href="/#home" className="flex items-center gap-2.5">
               <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                 <GraduationCap className="h-5 w-5" />
@@ -105,7 +107,7 @@ export function SiteFooter() {
           </div>
 
           {/* Admissions + contact */}
-          <div>
+          <div className="col-span-2 lg:col-span-1">
             <h4 className="text-sm font-semibold">Admissions Open</h4>
             <p className="mt-4 text-sm text-muted-foreground">
               Call or WhatsApp us to book a free demo class — enrollment is
@@ -144,7 +146,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 sm:flex-row">
+        <div className="mt-8 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 sm:mt-12 sm:flex-row">
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} Navya Computech. All rights reserved.
           </p>

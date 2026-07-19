@@ -1,12 +1,10 @@
 import { Inbox, Phone, Mail, Download } from "lucide-react";
-import { isDbConfigured } from "@/lib/mongodb";
 import { getInquiries } from "@/lib/db";
 import {
   PageHeader,
   TableCard,
   EmptyState,
   StatusPill,
-  DbNotice,
 } from "@/components/admin/primitives";
 import { InquiryControls } from "@/components/admin/inquiry-controls";
 import { Button } from "@/components/ui/button";
@@ -33,8 +31,6 @@ export default async function AdminInquiriesPage() {
           ) : undefined
         }
       />
-
-      {!isDbConfigured && <DbNotice />}
 
       {inquiries.length === 0 ? (
         <EmptyState

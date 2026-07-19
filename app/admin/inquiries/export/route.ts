@@ -1,5 +1,4 @@
 import { requireAdmin } from "@/lib/auth";
-import { isDbConfigured } from "@/lib/mongodb";
 import { getInquiries } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -15,13 +14,6 @@ export async function GET() {
     await requireAdmin();
   } catch {
     return new Response("Unauthorized", { status: 401 });
-  }
-
-  if (!isDbConfigured) {
-    return new Response(
-      "Database not connected. Add MONGODB_URI to .env to export data.",
-      { status: 503 },
-    );
   }
 
   const inquiries = await getInquiries();

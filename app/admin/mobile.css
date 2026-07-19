@@ -1,0 +1,49 @@
+/* ------------------------------------------------------------------ */
+/*  Admin panel — mobile responsiveness                                */
+/*  Companion to app/mobile.css (which handles the public site): the   */
+/*  central home for the admin panel's phone/tablet-only overrides.    */
+/*  Add admin mobile rules HERE instead of scattering them across      */
+/*  components, then apply the helper classes in JSX. Loaded by        */
+/*  app/admin/(panel)/layout.tsx, so it ships only with admin pages.   */
+/*                                                                     */
+/*  Rules live outside any @layer, so they win over Tailwind utility   */
+/*  classes without needing !important.                                */
+/* ------------------------------------------------------------------ */
+
+/* ---- Phones: below Tailwind's `sm` breakpoint (640px), where the ---- */
+/* ---- course form's field grids collapse to a single column.       ---- */
+@media (max-width: 639.98px) {
+  /* Helper — add to any admin element that should not exist on phones. */
+  .admin-phone-hidden {
+    display: none;
+  }
+
+  /* The form card hugs the screen edge, so relax its inner padding. */
+  .course-form-card {
+    padding: 1.25rem 1rem;
+  }
+
+  /* Save / Cancel become full-width stacked buttons — easy thumb reach. */
+  .course-form .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .course-form .form-actions > * {
+    width: 100%;
+  }
+
+  /* Dropdown options get taller rows on phones — comfier touch targets.
+     (The list is portaled to <body>, so it isn't under .course-form.) */
+  ul[role="listbox"] li button {
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+  }
+}
+
+/* ---- Very narrow phones: drop the syllabus row numbers so the ---- */
+/* ---- text inputs keep a usable width next to their buttons.    ---- */
+@media (max-width: 379.98px) {
+  .list-editor .row-num {
+    display: none;
+  }
+}

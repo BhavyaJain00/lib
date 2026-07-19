@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Trash2, Loader2 } from "lucide-react";
 import { updateInquiryStatus, deleteInquiry } from "@/app/admin/actions";
 import type { InquiryStatus } from "@/lib/db";
-import { Select } from "@/components/ui/select";
+import { Dropdown } from "@/components/ui/dropdown";
 import { Button } from "@/components/ui/button";
 
 const STATUSES: InquiryStatus[] = ["new", "contacted", "enrolled", "closed"];
@@ -42,19 +42,18 @@ export function InquiryControls({
   return (
     <div className="flex flex-col items-end gap-1">
       <div className="flex items-center gap-2">
-        <Select
+        <Dropdown
           value={status}
-          onChange={(e) => changeStatus(e.target.value)}
+          onChange={changeStatus}
           disabled={pending}
-          className="h-9 w-[130px] capitalize sm:h-9"
+          className="w-[130px]"
+          triggerClassName="h-9 sm:h-9"
           aria-label="Query status"
-        >
-          {STATUSES.map((s) => (
-            <option key={s} value={s} className="capitalize">
-              {s}
-            </option>
-          ))}
-        </Select>
+          options={STATUSES.map((s) => ({
+            value: s,
+            label: s.charAt(0).toUpperCase() + s.slice(1),
+          }))}
+        />
         <Button
           variant="ghost"
           size="icon"

@@ -1,5 +1,4 @@
 import * as React from "react";
-import { AlertTriangle } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
@@ -68,23 +67,6 @@ export function EmptyState({
       {description && (
         <p className="mt-1 max-w-sm text-sm text-muted-foreground">{description}</p>
       )}
-    </div>
-  );
-}
-
-/** Banner shown across admin pages when MongoDB isn't connected. */
-export function DbNotice() {
-  return (
-    <div className="mb-6 flex items-start gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-700 dark:text-amber-400">
-      <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
-      <span>
-        <strong>MongoDB isn&apos;t connected.</strong> Set{" "}
-        <code className="rounded bg-muted px-1">MONGODB_URI</code> in your{" "}
-        <code className="rounded bg-muted px-1">.env</code> and restart, then run{" "}
-        <code className="rounded bg-muted px-1">npm run seed</code> to load the
-        starter courses. Until then the site shows built-in sample data and
-        nothing can be saved.
-      </span>
     </div>
   );
 }

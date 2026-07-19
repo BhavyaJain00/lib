@@ -187,12 +187,40 @@ scripts/seed.mjs            Seeds Atlas
 
 ---
 
-## ☁️ Deploy
+## ☁️ Deploy to Vercel
 
-Deploy to **Vercel**: import the repo and add `MONGODB_URI`, `MONGODB_DB`,
-`ADMIN_EMAIL`, `ADMIN_PASSWORD`, `AUTH_SECRET` and `NEXT_PUBLIC_SITE_URL` in
-project settings. Make sure Atlas Network Access allows `0.0.0.0/0` so Vercel
-can connect.
+`.env` is git-ignored, so it is **never** uploaded. Add each variable manually
+under **Project → Settings → Environment Variables** (tick Production, Preview
+and Development), then **Redeploy** — env changes only apply to new builds.
+
+| Variable | Value to use on Vercel |
+|----------|------------------------|
+| `MONGODB_URI` | Your **Atlas** string. The short `mongodb+srv://...` form is fine here (Vercel's DNS resolves SRV correctly). |
+| `MONGODB_DB` | `navya_computech` |
+| `ADMIN_EMAIL` | The email you'll sign in to `/admin` with |
+| `ADMIN_PASSWORD` | A **strong** password — not the one used locally |
+| `AUTH_SECRET` | A **fresh** random value (see below) — never the placeholder |
+| `NEXT_PUBLIC_SITE_URL` | Your live domain, e.g. `https://navyacomputech.vercel.app` |
+
+Generate a production `AUTH_SECRET`:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+### Two things that will break the deploy if missed
+
+1. **Atlas Network Access** — Vercel's IPs are dynamic, so you must allow
+   `0.0.0.0/0` (Atlas → Network Access → Add IP → *Allow access from anywhere*).
+   Without it every request times out.
+2. **A local `MONGODB_URI` won't work.** `mongodb://localhost:27017` points at
+   *your PC* — a deployed site can't reach it. Use the Atlas string.
+
+> **Note on the SRV vs non-SRV string:** this project's local `.env` uses the
+> long non-SRV form (`mongodb://host-00,host-01,host-02/?replicaSet=...`)
+> because Node's SRV DNS lookup is blocked on the dev machine. On Vercel either
+> form works — prefer the short `mongodb+srv://` one there, as it keeps working
+> if Atlas ever changes the cluster's shard hostnames.
 
 ---
 

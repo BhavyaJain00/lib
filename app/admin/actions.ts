@@ -9,7 +9,6 @@ import {
   destroySession,
   isAdminConfigured,
 } from "@/lib/auth";
-import { isDbConfigured } from "@/lib/mongodb";
 import {
   createCourse,
   updateCourse,
@@ -22,13 +21,11 @@ import {
   type InquiryStatus,
   type CourseInput,
 } from "@/lib/db";
+import { saveUpload } from "@/lib/uploads";
 import { ICON_KEYS, type IconKey } from "@/lib/icons";
 
 export type ActionResult = { ok: boolean; error?: string };
 export type FormState = { status: "idle" | "error"; message: string };
-
-const NOT_CONNECTED =
-  "Database not connected. Check MONGODB_URI in .env and that MongoDB is running, then restart the server.";
 
 function lines(value: string): string[] {
   return value
@@ -92,7 +89,6 @@ export async function updateInquiryStatus(
 ): Promise<ActionResult> {
   const actor = await requireAdmin();
   if (!STATUSES.includes(status)) return { ok: false, error: "Invalid status." };
-  if (!isDbConfigured) return { ok: false, error: NOT_CONNECTED };
 
   try {
     await setInquiryStatus(id, status);
@@ -108,7 +104,6 @@ export async function updateInquiryStatus(
 
 export async function deleteInquiry(id: string): Promise<ActionResult> {
   const actor = await requireAdmin();
-  if (!isDbConfigured) return { ok: false, error: NOT_CONNECTED };
 
   try {
     await deleteInquiryById(id);
@@ -144,6 +139,9 @@ function readCourseForm(formData: FormData): CourseInput | { error: string } {
     featured: formData.get("featured") === "on",
     isActive: formData.get("isActive") === "on",
     sortOrder: Number(formData.get("sortOrder") ?? 0) || 0,
+    // Hidden fields holding the already-uploaded paths ("" = removed).
+    image: String(formData.get("image") ?? "").trim() || null,
+    document: String(formData.get("document") ?? "").trim() || null,
   };
 
   if (!input.title) return { error: "Title is required." };
@@ -160,13 +158,22 @@ export async function saveCourse(
   formData: FormData,
 ): Promise<FormState> {
   const actor = await requireAdmin();
-  if (!isDbConfigured) return { status: "error", message: NOT_CONNECTED };
 
   const id = String(formData.get("id") ?? "").trim();
   const parsed = readCourseForm(formData);
   if ("error" in parsed) return { status: "error", message: parsed.error };
 
   try {
+    // A newly chosen file replaces whatever the hidden field pointed at.
+    const imageFile = formData.get("imageFile");
+    if (imageFile instanceof File && imageFile.size > 0) {
+      parsed.image = await saveUpload(imageFile, "image");
+    }
+    const documentFile = formData.get("documentFile");
+    if (documentFile instanceof File && documentFile.size > 0) {
+      parsed.document = await saveUpload(documentFile, "doc");
+    }
+
     if (id) {
       await updateCourse(id, parsed);
       await logActivity("course_updated", `Course updated: ${parsed.title}`, {
@@ -193,7 +200,6 @@ export async function toggleCourse(
   value: boolean,
 ): Promise<ActionResult> {
   const actor = await requireAdmin();
-  if (!isDbConfigured) return { ok: false, error: NOT_CONNECTED };
 
   try {
     const course = await getCourseById(id);
@@ -213,7 +219,6 @@ export async function toggleCourse(
 
 export async function deleteCourse(id: string): Promise<ActionResult> {
   const actor = await requireAdmin();
-  if (!isDbConfigured) return { ok: false, error: NOT_CONNECTED };
 
   try {
     const course = await getCourseById(id);

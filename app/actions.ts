@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { isDbConfigured } from "@/lib/mongodb";
 import { createInquiry, logActivity } from "@/lib/db";
 
 export type FormState = {
@@ -32,14 +31,6 @@ export async function submitInquiry(
     return { status: "error", message: "Please enter a valid phone number." };
   if (email && !EMAIL_RE.test(email))
     return { status: "error", message: "Please enter a valid email address." };
-
-  if (!isDbConfigured) {
-    return {
-      status: "success",
-      message:
-        "Thanks! Your query was received (demo mode — connect MongoDB to store it).",
-    };
-  }
 
   try {
     await createInquiry({

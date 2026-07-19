@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Terms & Conditions",
   description:
     "Terms and conditions for enrolling in courses at Navya Computech.",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {

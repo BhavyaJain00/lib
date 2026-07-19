@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { Hero } from "@/components/sections/hero";
 import { Stats } from "@/components/sections/stats";
@@ -11,11 +12,15 @@ import { SiteFooter } from "@/components/site-footer";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { AdminFab } from "@/components/admin-fab";
 import { BackToTop } from "@/components/back-to-top";
-import { OrganizationJsonLd } from "@/components/json-ld";
+import { OrganizationJsonLd, FaqJsonLd } from "@/components/json-ld";
 import { getPublicCourses } from "@/lib/db";
 
 // Re-generate every 5 minutes so admin edits go live without a redeploy.
 export const revalidate = 300;
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default async function HomePage() {
   const courses = await getPublicCourses();
@@ -23,6 +28,7 @@ export default async function HomePage() {
   return (
     <>
       <OrganizationJsonLd />
+      <FaqJsonLd />
       <SiteHeader />
       <main>
         <Hero />

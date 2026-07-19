@@ -18,6 +18,14 @@
 *.pfx
 
 # -----------------------------------------------------------------------------
+#  Site data  — JSON files written by the app (courses, queries, activity).
+#  Queries contain visitors' personal details, so keep them out of git.
+#  /public/uploads holds admin-uploaded course images and documents.
+# -----------------------------------------------------------------------------
+/data/
+/public/uploads/
+
+# -----------------------------------------------------------------------------
 #  Dependencies
 # -----------------------------------------------------------------------------
 /node_modules

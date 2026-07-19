@@ -1,13 +1,11 @@
 import Link from "next/link";
 import { BookOpen, Plus } from "lucide-react";
-import { isDbConfigured } from "@/lib/mongodb";
 import { getAllCourses } from "@/lib/db";
 import { getIcon } from "@/lib/icons";
 import {
   PageHeader,
   TableCard,
   EmptyState,
-  DbNotice,
 } from "@/components/admin/primitives";
 import { CourseControls } from "@/components/admin/course-controls";
 import { Button } from "@/components/ui/button";
@@ -32,13 +30,11 @@ export default async function AdminCoursesPage() {
         }
       />
 
-      {!isDbConfigured && <DbNotice />}
-
       {courses.length === 0 ? (
         <EmptyState
           icon={BookOpen}
-          title="No courses in the database"
-          description="Run `npm run seed` to load the starter catalogue, or add your first course now."
+          title="No courses yet"
+          description="Add your first course now — it appears on the website instantly."
         />
       ) : (
         <TableCard>
@@ -59,9 +55,18 @@ export default async function AdminCoursesPage() {
                   <td className="px-4 py-4 text-muted-foreground">{c.sortOrder}</td>
                   <td className="px-4 py-4">
                     <div className="flex items-center gap-3">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                        <Icon className="h-4 w-4" />
-                      </span>
+                      {c.image ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={c.image}
+                          alt=""
+                          className="h-9 w-9 shrink-0 rounded-lg border border-border object-cover"
+                        />
+                      ) : (
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                          <Icon className="h-4 w-4" />
+                        </span>
+                      )}
                       <div className="min-w-0">
                         <Link
                           href={`/admin/courses/${c._id}`}

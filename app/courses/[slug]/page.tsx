@@ -9,6 +9,7 @@ import {
   Briefcase,
   CheckCircle2,
   Clock,
+  FileText,
   GraduationCap,
   Mail,
   MessageCircle,
@@ -22,10 +23,11 @@ import { BackToTop } from "@/components/back-to-top";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { CourseJsonLd } from "@/components/json-ld";
+import { CourseJsonLd, BreadcrumbJsonLd } from "@/components/json-ld";
 import { COURSES, CONTACT } from "@/lib/data";
 import { getPublicCourse, getPublicCourses } from "@/lib/db";
 import { getIcon } from "@/lib/icons";
+import { SITE_NAME } from "@/lib/site";
 
 // Re-generate every 5 minutes so admin course edits go live without a
 // redeploy. Courses created later render on demand.
@@ -46,7 +48,28 @@ export async function generateMetadata({
   return {
     title: course.title,
     description: course.tagline,
-    openGraph: { title: `${course.title} | Navya Computech`, description: course.tagline },
+    keywords: [
+      course.title,
+      `${course.title} course`,
+      `${course.title} classes`,
+      course.certification,
+      ...course.careers,
+    ],
+    alternates: { canonical: `/courses/${slug}` },
+    openGraph: {
+      title: `${course.title} | ${SITE_NAME}`,
+      description: course.tagline,
+      url: `/courses/${slug}`,
+      type: "website",
+      siteName: SITE_NAME,
+      // Uploaded course photo becomes the link-share image when present.
+      ...(course.image ? { images: [{ url: course.image, alt: course.title }] } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${course.title} | ${SITE_NAME}`,
+      description: course.tagline,
+    },
   };
 }
 
@@ -76,6 +99,17 @@ export default async function CoursePage({
         title={course.title}
         description={course.tagline}
         slug={course.slug}
+        level={course.level}
+        syllabus={course.syllabus}
+        duration={course.duration}
+        image={course.image}
+      />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", href: "/" },
+          { name: "Courses", href: "/#courses" },
+          { name: course.title, href: `/courses/${course.slug}` },
+        ]}
       />
       <SiteHeader />
       <main>
@@ -132,6 +166,17 @@ export default async function CoursePage({
                   </span>
                 </div>
               </div>
+
+              {course.image && (
+                <div className="w-full shrink-0 lg:w-[380px]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={course.image}
+                    alt={course.title}
+                    className="aspect-[4/3] w-full rounded-xl border border-border object-cover shadow-lg"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -240,6 +285,19 @@ export default async function CoursePage({
                       Email Us
                     </a>
                   </Button>
+                  {course.document && (
+                    <Button asChild size="lg" variant="outline" className="w-full">
+                      <a
+                        href={course.document}
+                        download
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <FileText className="h-4 w-4" />
+                        Download Brochure / Syllabus
+                      </a>
+                    </Button>
+                  )}
                 </div>
 
                 <div className="mt-6 space-y-3 border-t border-border pt-6 text-sm">

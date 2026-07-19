@@ -87,7 +87,7 @@ export function SiteHeader() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="border-t border-border bg-background lg:hidden">
+        <div className="mobile-nav border-t border-border bg-background lg:hidden">
           <nav className="container-page flex flex-col py-3">
             {NAV_LINKS.map((link) => (
               <Link

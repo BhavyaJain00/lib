@@ -6,6 +6,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
+      // The admin panel is private (it also carries noindex meta tags).
+      disallow: ["/admin"],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
   };
