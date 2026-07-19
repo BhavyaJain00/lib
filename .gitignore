@@ -19,11 +19,15 @@
 
 # -----------------------------------------------------------------------------
 #  Site data  — JSON files written by the app (courses, queries, activity).
-#  Queries contain visitors' personal details, so keep them out of git.
-#  /public/uploads holds admin-uploaded course images and documents.
+#  Queries/activity contain visitors' personal details, so keep them out of
+#  git. courses.json IS committed — it's the catalogue the live site serves
+#  (deploys can't write to disk, so the pushed file is the source of truth).
+#  /public/uploads holds admin-uploaded course images and documents; commit
+#  them so they survive on the live site too.
 # -----------------------------------------------------------------------------
-/data/
-/public/uploads/
+/data/inquiries.json
+/data/activity.json
+/data/*.tmp
 
 # -----------------------------------------------------------------------------
 #  Dependencies

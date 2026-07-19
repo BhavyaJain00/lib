@@ -1,0 +1,272 @@
+[
+  {
+    "slug": "rscit",
+    "title": "RSCIT",
+    "icon": "Award",
+    "tagline": "The official RKCL computer literacy certificate — essential for government jobs.",
+    "duration": "3 Months",
+    "batchSize": "Max 20 Students",
+    "level": "Beginner",
+    "certification": "RKCL / VMOU Certificate",
+    "featured": true,
+    "syllabus": [
+      "Computer Fundamentals & Windows",
+      "Internet, Email & Digital Payments",
+      "MS Office — Word, Excel, PowerPoint",
+      "Government e-Services & Digital India",
+      "RSCIT Exam Practice & Mock Tests"
+    ],
+    "careers": [
+      "Government Job Eligibility",
+      "Data Entry Operator",
+      "Office Assistant"
+    ],
+    "_id": "f927265c-eec6-44ae-a383-afb258fe32eb",
+    "isActive": true,
+    "sortOrder": 0,
+    "createdAt": "2026-07-18T16:15:09.522Z",
+    "updatedAt": "2026-07-19T06:50:14.280Z"
+  },
+  {
+    "slug": "basic-computer",
+    "title": "Basic Computer",
+    "icon": "Monitor",
+    "tagline": "Build strong digital foundations — from operating systems to office productivity.",
+    "duration": "2 Months",
+    "batchSize": "Max 15 Students",
+    "level": "Beginner",
+    "certification": "ISO 9001:2015 Certificate",
+    "syllabus": [
+      "Computer Fundamentals & OS Basics",
+      "MS Word, Excel & PowerPoint",
+      "Internet, Email & Cloud Basics",
+      "Typing Mastery & Shortcuts",
+      "File Management & Printing"
+    ],
+    "careers": [
+      "Data Entry Operator",
+      "Office Assistant",
+      "Front Office Executive"
+    ],
+    "_id": "570dfc9a-a994-4fa7-b0ba-927cca503ed2",
+    "featured": false,
+    "isActive": true,
+    "sortOrder": 1,
+    "createdAt": "2026-07-18T16:15:09.522Z",
+    "updatedAt": "2026-07-19T06:50:15.256Z"
+  },
+  {
+    "slug": "advance-computer",
+    "title": "Advance Computer",
+    "icon": "Cpu",
+    "tagline": "Level up with advanced Excel, automation and professional office workflows.",
+    "duration": "3 Months",
+    "batchSize": "Max 15 Students",
+    "level": "Intermediate",
+    "certification": "ISO 9001:2015 Certificate",
+    "syllabus": [
+      "Advanced Excel — Formulas & Pivot Tables",
+      "Data Analysis & Dashboards",
+      "MS Access & Database Basics",
+      "Office Automation & Macros",
+      "Business Documentation"
+    ],
+    "careers": [
+      "Office Executive",
+      "MIS Executive",
+      "Back Office Analyst"
+    ],
+    "_id": "89d39f1d-4e94-4ac5-a0e0-26659cab5178",
+    "featured": false,
+    "isActive": false,
+    "sortOrder": 2,
+    "createdAt": "2026-07-18T16:15:09.522Z",
+    "updatedAt": "2026-07-18T16:16:24.673Z"
+  },
+  {
+    "slug": "tally-gst",
+    "title": "Tally Prime & GST",
+    "icon": "Calculator",
+    "tagline": "Become job-ready in accounting with Tally Prime, GST and taxation.",
+    "duration": "3 Months",
+    "batchSize": "Max 15 Students",
+    "level": "Beginner",
+    "certification": "ISO 9001:2015 Certificate",
+    "featured": true,
+    "syllabus": [
+      "Accounting Fundamentals",
+      "Tally Prime Complete",
+      "GST Concepts & Filing",
+      "Inventory & Payroll",
+      "Income Tax & TDS Basics"
+    ],
+    "careers": [
+      "Accountant",
+      "Accounts Executive",
+      "GST Practitioner"
+    ],
+    "_id": "596e7f10-e5ca-4e8a-a0af-d79a8686eab4",
+    "isActive": false,
+    "sortOrder": 3,
+    "createdAt": "2026-07-18T16:15:09.522Z",
+    "updatedAt": "2026-07-19T06:49:52.562Z"
+  },
+  {
+    "slug": "web-development",
+    "title": "Web Development",
+    "icon": "Code2",
+    "tagline": "Go from HTML to full-stack apps with live projects and a real portfolio.",
+    "duration": "6 Months",
+    "batchSize": "Max 12 Students",
+    "level": "Beginner to Advanced",
+    "certification": "Industry-Recognized Certificate",
+    "featured": true,
+    "syllabus": [
+      "HTML5, CSS3 & Responsive Design",
+      "JavaScript & Modern ES6+",
+      "React & Next.js Fundamentals",
+      "Backend with Node & Databases",
+      "Deployment & Live Projects"
+    ],
+    "careers": [
+      "Frontend Developer",
+      "Full-Stack Developer",
+      "Web Designer"
+    ],
+    "_id": "5642dc03-2bb3-4d8e-98a6-1ebc8b228bd2",
+    "isActive": false,
+    "sortOrder": 4,
+    "createdAt": "2026-07-18T16:15:09.522Z",
+    "updatedAt": "2026-07-18T16:16:27.915Z"
+  },
+  {
+    "slug": "govt-exam-preparation",
+    "title": "Govt Exam Preparation",
+    "icon": "Landmark",
+    "tagline": "Focused computer-section coaching for government and banking exams.",
+    "duration": "4 Months",
+    "batchSize": "Max 20 Students",
+    "level": "All Levels",
+    "certification": "Institute Certificate",
+    "featured": true,
+    "syllabus": [
+      "Computer Awareness for Competitive Exams",
+      "Typing Speed & Accuracy Practice",
+      "Previous Year Papers & Analysis",
+      "Weekly Mock Tests & Ranking",
+      "Interview & Document Guidance"
+    ],
+    "careers": [
+      "Bank Clerk / PO",
+      "SSC & Railway Posts",
+      "State Govt Departments"
+    ],
+    "_id": "7fea0360-a39f-4bda-bf28-6c686c6a1187",
+    "isActive": false,
+    "sortOrder": 5,
+    "createdAt": "2026-07-18T16:15:09.522Z",
+    "updatedAt": "2026-07-19T06:49:54.002Z"
+  },
+  {
+    "slug": "digital-marketing",
+    "title": "Digital Marketing",
+    "icon": "Megaphone",
+    "tagline": "Master SEO, social media, ads and analytics to grow real brands online.",
+    "duration": "4 Months",
+    "batchSize": "Max 15 Students",
+    "level": "Intermediate",
+    "certification": "Industry-Recognized Certificate",
+    "syllabus": [
+      "SEO & Keyword Research",
+      "Google Ads & Meta Ads",
+      "Social Media Marketing",
+      "Content & Email Marketing",
+      "Google Analytics & Reporting"
+    ],
+    "careers": [
+      "Digital Marketing Executive",
+      "SEO Specialist",
+      "Social Media Manager"
+    ],
+    "_id": "bc218b86-e17b-4a0b-bf66-afec2aa00f50",
+    "featured": false,
+    "isActive": false,
+    "sortOrder": 6,
+    "createdAt": "2026-07-18T16:15:09.522Z",
+    "updatedAt": "2026-07-19T06:49:55.235Z"
+  },
+  {
+    "slug": "ai-prompt-engineering",
+    "title": "AI & Prompt Engineering",
+    "icon": "Sparkles",
+    "tagline": "Work hands-on with modern AI tools and learn to craft high-impact prompts.",
+    "duration": "2 Months",
+    "batchSize": "Max 12 Students",
+    "level": "All Levels",
+    "certification": "Industry-Recognized Certificate",
+    "syllabus": [
+      "Foundations of AI & LLMs",
+      "Prompt Engineering Techniques",
+      "AI Tools for Productivity",
+      "Content, Image & Code Generation",
+      "Building AI-Powered Workflows"
+    ],
+    "careers": [
+      "AI Content Specialist",
+      "Prompt Engineer",
+      "Automation Associate"
+    ],
+    "_id": "4230a6d6-57e6-4f79-b638-0a25da596220",
+    "featured": false,
+    "isActive": false,
+    "sortOrder": 7,
+    "createdAt": "2026-07-18T16:15:09.522Z",
+    "updatedAt": "2026-07-19T06:49:56.352Z"
+  },
+  {
+    "slug": "test",
+    "title": "test",
+    "icon": "BookOpen",
+    "tagline": "test",
+    "duration": "7",
+    "batchSize": "12",
+    "level": "12",
+    "certification": "test",
+    "syllabus": [
+      "qw"
+    ],
+    "careers": [
+      "qw"
+    ],
+    "featured": false,
+    "isActive": false,
+    "sortOrder": 12,
+    "_id": "d585d1a1-1c39-425f-b44b-ddfc7f2d8c81",
+    "createdAt": "2026-07-18T16:17:27.701Z",
+    "updatedAt": "2026-07-19T06:49:57.633Z"
+  },
+  {
+    "slug": "oiuytre",
+    "title": "poiuytrewq",
+    "icon": "Calculator",
+    "tagline": "poiuytrewq",
+    "duration": "6 Months",
+    "batchSize": "Max 15 Students",
+    "level": "Intermediate",
+    "certification": "ISO 9001:2015 Certificate",
+    "syllabus": [
+      "qwertyuio"
+    ],
+    "careers": [
+      "qwertyuio"
+    ],
+    "featured": false,
+    "isActive": true,
+    "sortOrder": -2,
+    "image": null,
+    "document": null,
+    "_id": "dd0052bb-929d-4750-84ef-365b8febbf63",
+    "createdAt": "2026-07-19T06:53:00.650Z",
+    "updatedAt": "2026-07-19T06:53:00.650Z"
+  }
+]

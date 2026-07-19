@@ -44,6 +44,11 @@ export type ActivityDoc = {
  * database needed. The files are created automatically on first use, and the
  * course catalogue is seeded from the samples in lib/data.ts, so the admin
  * panel works out of the box. Open the files in any editor to inspect data.
+ *
+ * On serverless hosts (e.g. Vercel) the filesystem is read-only, so the first
+ * failed write flips storage over to an in-memory copy kept on globalThis.
+ * The bundled data/courses.json still serves the real catalogue; queries and
+ * edits made on the live site last only as long as the server instance.
  */
 const DATA_DIR = path.join(process.cwd(), "data");
 
@@ -61,7 +66,15 @@ const ACTIVITY_CAP = 500;
 // read-modify-write on the same file.
 const globalForStore = globalThis as unknown as {
   _jsonStoreLock?: Promise<unknown>;
+  _memStore?: Map<string, unknown[]>;
+  _fsReadOnly?: boolean;
 };
+
+/** In-memory lists (keyed by file path) used once the disk turns out to be read-only. */
+function memStore(): Map<string, unknown[]> {
+  if (!globalForStore._memStore) globalForStore._memStore = new Map();
+  return globalForStore._memStore;
+}
 
 function withLock<T>(fn: () => Promise<T>): Promise<T> {
   const run = (globalForStore._jsonStoreLock ?? Promise.resolve()).then(fn, fn);
@@ -69,8 +82,10 @@ function withLock<T>(fn: () => Promise<T>): Promise<T> {
   return run;
 }
 
-/** Parsed list from a JSON file, or null when missing/unreadable. */
+/** Parsed list from memory or a JSON file, or null when missing/unreadable. */
 async function readList<T>(file: string): Promise<T[] | null> {
+  const mem = memStore().get(file);
+  if (mem) return mem as T[];
   try {
     const parsed = JSON.parse(await fs.readFile(file, "utf8"));
     return Array.isArray(parsed) ? (parsed as T[]) : null;
@@ -80,12 +95,21 @@ async function readList<T>(file: string): Promise<T[] | null> {
 }
 
 // Write to a temp file then rename over the target — a crash mid-write can't
-// leave a half-written (corrupt) JSON file behind.
+// leave a half-written (corrupt) JSON file behind. If the disk can't be
+// written at all (read-only serverless host), keep the list in memory instead.
 async function writeList(file: string, list: unknown[]): Promise<void> {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  const tmp = `${file}.tmp`;
-  await fs.writeFile(tmp, JSON.stringify(list, null, 2), "utf8");
-  await fs.rename(tmp, file);
+  if (!globalForStore._fsReadOnly) {
+    try {
+      await fs.mkdir(DATA_DIR, { recursive: true });
+      const tmp = `${file}.tmp`;
+      await fs.writeFile(tmp, JSON.stringify(list, null, 2), "utf8");
+      await fs.rename(tmp, file);
+      return;
+    } catch {
+      globalForStore._fsReadOnly = true;
+    }
+  }
+  memStore().set(file, list);
 }
 
 function seedCourses(): CourseDoc[] {

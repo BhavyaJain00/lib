@@ -1,6 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Ship the committed course catalogue inside every serverless function so
+  // the live site serves the real courses (lib/db.ts reads it at runtime;
+  // deployed filesystems are read-only, so the file can't be created there).
+  outputFileTracingIncludes: {
+    "/*": ["./data/courses.json"],
+    "/**": ["./data/courses.json"],
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
