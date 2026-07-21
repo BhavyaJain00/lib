@@ -15,6 +15,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { BackToTop } from "@/components/back-to-top";
+import { Chatbot } from "@/components/chatbot/chatbot";
 import { SectionHeading } from "@/components/section-heading";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -242,6 +243,7 @@ export default function AboutPage() {
       </main>
       <SiteFooter />
       <WhatsAppFab />
+      <Chatbot />
       <BackToTop />
     </>
   );

@@ -1,18 +1,22 @@
 import "server-only";
 import { promises as fs } from "fs";
 import path from "path";
+import { getSupabase } from "@/lib/supabase";
 
 /**
- * Uploaded files are written to `public/uploads/` so Next serves them as
- * static assets — no database or storage service needed. The returned value
- * ("/uploads/<name>") is stored on the course and used directly as a URL.
+ * When Supabase is configured, uploads go to its public "uploads" Storage
+ * bucket (created by supabase/schema.sql) and the stored value is the file's
+ * permanent https URL — this is what the deployed site needs, since serverless
+ * filesystems are read-only.
  *
- * On read-only hosts (e.g. Vercel) the write falls back to an in-memory map,
- * and app/uploads/[name]/route.ts serves those under the same URLs. Such
- * files last only as long as the server instance — for a permanent image,
- * upload it locally and commit the file in public/uploads.
+ * Without Supabase, files are written to `public/uploads/` so Next serves
+ * them as static assets ("/uploads/<name>"). On read-only hosts that write
+ * falls back to an in-memory map served by app/uploads/[name]/route.ts, and
+ * such files last only as long as the server instance.
  */
 const UPLOADS_DIR = path.join(process.cwd(), "public", "uploads");
+
+const STORAGE_BUCKET = "uploads";
 
 const RULES = {
   image: {
@@ -78,6 +82,21 @@ export async function saveUpload(
       .slice(0, 40) || kind;
   const name = `${Date.now()}-${base}${ext}`;
   const data = Buffer.from(await file.arrayBuffer());
+  const contentType = MIME[ext] ?? "application/octet-stream";
+
+  const sb = getSupabase();
+  if (sb) {
+    const { error } = await sb.storage
+      .from(STORAGE_BUCKET)
+      .upload(name, data, { contentType, upsert: false });
+    if (error) {
+      throw new Error(
+        `${rule.label} upload failed: ${error.message}. ` +
+          `Check that the public "${STORAGE_BUCKET}" bucket exists in Supabase (run supabase/schema.sql).`,
+      );
+    }
+    return sb.storage.from(STORAGE_BUCKET).getPublicUrl(name).data.publicUrl;
+  }
 
   if (!globalForUploads._uploadsFsReadOnly) {
     try {
@@ -89,10 +108,7 @@ export async function saveUpload(
     }
   }
 
-  memUploads().set(name, {
-    contentType: MIME[ext] ?? "application/octet-stream",
-    data,
-  });
+  memUploads().set(name, { contentType, data });
   return `/uploads/${name}`;
 }
 

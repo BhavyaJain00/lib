@@ -3,7 +3,7 @@ import type { IconKey } from "@/lib/icons";
 /**
  * Course shape used across the site. `icon` is a STRING key (see lib/icons.ts)
  * rather than a component so the same shape works for both the static sample
- * data below and documents stored in MongoDB.
+ * data below and rows stored in Supabase.
  */
 export type Course = {
   slug: string;
@@ -24,9 +24,9 @@ export type Course = {
 };
 
 /**
- * Sample catalogue — used when MongoDB isn't connected, and seeded into the
- * database by `npm run seed`. Once connected, the admin panel is the source of
- * truth and edits appear on the site automatically.
+ * Sample catalogue — used when Supabase isn't connected (demo mode), and
+ * mirrored by the seed in supabase/schema.sql. Once connected, the admin
+ * panel is the source of truth and edits appear on the site automatically.
  */
 export const COURSES: Course[] = [
   {

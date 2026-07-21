@@ -45,6 +45,16 @@
     left: 1rem;
     bottom: calc(1rem + env(safe-area-inset-bottom));
   }
+  .chatbot-fab {
+    left: 1rem;
+    bottom: calc(5.5rem + env(safe-area-inset-bottom));
+  }
+  .chatbot-panel {
+    left: 0.75rem;
+    right: 0.75rem;
+    width: auto;
+    bottom: calc(0.75rem + env(safe-area-inset-bottom));
+  }
 
   /* Hover tooltips make no sense on touch — they'd flash on tap. */
   .fab-tip {

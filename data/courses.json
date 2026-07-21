@@ -25,7 +25,7 @@
     "isActive": true,
     "sortOrder": 0,
     "createdAt": "2026-07-18T16:15:09.522Z",
-    "updatedAt": "2026-07-19T06:50:14.280Z"
+    "updatedAt": "2026-07-21T12:42:03.655Z"
   },
   {
     "slug": "basic-computer",
@@ -53,7 +53,7 @@
     "isActive": true,
     "sortOrder": 1,
     "createdAt": "2026-07-18T16:15:09.522Z",
-    "updatedAt": "2026-07-19T06:50:15.256Z"
+    "updatedAt": "2026-07-21T12:42:11.647Z"
   },
   {
     "slug": "advance-computer",
@@ -78,10 +78,10 @@
     ],
     "_id": "89d39f1d-4e94-4ac5-a0e0-26659cab5178",
     "featured": false,
-    "isActive": false,
+    "isActive": true,
     "sortOrder": 2,
     "createdAt": "2026-07-18T16:15:09.522Z",
-    "updatedAt": "2026-07-18T16:16:24.673Z"
+    "updatedAt": "2026-07-21T12:42:18.409Z"
   },
   {
     "slug": "tally-gst",
@@ -106,10 +106,10 @@
       "GST Practitioner"
     ],
     "_id": "596e7f10-e5ca-4e8a-a0af-d79a8686eab4",
-    "isActive": false,
+    "isActive": true,
     "sortOrder": 3,
     "createdAt": "2026-07-18T16:15:09.522Z",
-    "updatedAt": "2026-07-19T06:49:52.562Z"
+    "updatedAt": "2026-07-21T12:42:19.196Z"
   },
   {
     "slug": "web-development",
@@ -134,10 +134,10 @@
       "Web Designer"
     ],
     "_id": "5642dc03-2bb3-4d8e-98a6-1ebc8b228bd2",
-    "isActive": false,
+    "isActive": true,
     "sortOrder": 4,
     "createdAt": "2026-07-18T16:15:09.522Z",
-    "updatedAt": "2026-07-18T16:16:27.915Z"
+    "updatedAt": "2026-07-21T12:42:18.880Z"
   },
   {
     "slug": "govt-exam-preparation",
@@ -165,7 +165,7 @@
     "isActive": false,
     "sortOrder": 5,
     "createdAt": "2026-07-18T16:15:09.522Z",
-    "updatedAt": "2026-07-19T06:49:54.002Z"
+    "updatedAt": "2026-07-21T12:22:22.062Z"
   },
   {
     "slug": "digital-marketing",
@@ -193,7 +193,7 @@
     "isActive": false,
     "sortOrder": 6,
     "createdAt": "2026-07-18T16:15:09.522Z",
-    "updatedAt": "2026-07-19T06:49:55.235Z"
+    "updatedAt": "2026-07-21T12:22:24.085Z"
   },
   {
     "slug": "ai-prompt-engineering",
@@ -221,7 +221,7 @@
     "isActive": false,
     "sortOrder": 7,
     "createdAt": "2026-07-18T16:15:09.522Z",
-    "updatedAt": "2026-07-19T06:49:56.352Z"
+    "updatedAt": "2026-07-21T12:22:25.122Z"
   },
   {
     "slug": "test",
@@ -243,7 +243,7 @@
     "sortOrder": 12,
     "_id": "d585d1a1-1c39-425f-b44b-ddfc7f2d8c81",
     "createdAt": "2026-07-18T16:17:27.701Z",
-    "updatedAt": "2026-07-19T06:49:57.633Z"
+    "updatedAt": "2026-07-21T12:22:26.193Z"
   },
   {
     "slug": "oiuytre",
@@ -267,6 +267,6 @@
     "document": null,
     "_id": "dd0052bb-929d-4750-84ef-365b8febbf63",
     "createdAt": "2026-07-19T06:53:00.650Z",
-    "updatedAt": "2026-07-19T06:53:00.650Z"
+    "updatedAt": "2026-07-21T12:41:56.378Z"
   }
 ]

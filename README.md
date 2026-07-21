@@ -6,7 +6,7 @@ design system: **Inter** font, **blue-600** primary, **slate** neutrals,
 `0.5rem` radius, full light + dark theme.
 
 Built with **Next.js 16 (App Router)**, **React 19**, **TypeScript**,
-**Tailwind CSS v4** and **MongoDB** (local via Compass, or Atlas in the cloud),
+**Tailwind CSS v4** and **Supabase** (hosted Postgres, free tier),
 with an **admin panel** to manage courses and student queries.
 
 > **No online payments.** The site showcases courses; students enroll by
@@ -43,8 +43,9 @@ npm install
 npm run dev      # http://localhost:3000
 ```
 
-The site runs immediately in **demo mode** (sample courses, form simulates
-success, `/admin` opens unlocked). To store real data, connect Atlas below.
+The site runs immediately in **demo mode** (sample courses stored in local
+JSON files, `/admin` opens unlocked). To store real data — **required before
+deploying** — connect Supabase below.
 
 ### Scripts
 
@@ -53,62 +54,34 @@ success, `/admin` opens unlocked). To store real data, connect Atlas below.
 | `npm run dev` | Start the dev server |
 | `npm run build` | Production build |
 | `npm start` | Serve the production build |
-| `npm run seed` | Load the starter course catalogue into Atlas |
 | `npm run typecheck` | `tsc --noEmit` |
 
 ---
 
-## 🗄️ Database setup
+## 🗄️ Database setup (Supabase)
 
-> **MongoDB Compass** is the free desktop app for *viewing* your data — it
-> isn't a database itself. It connects to a MongoDB server, either on your own
-> PC (local) or in the cloud (Atlas). The app works with both: only the
-> `MONGODB_URI` changes.
+Full walkthrough with screenshots-level detail: **[SUPABASE.md](SUPABASE.md)**.
+The short version:
 
-### Option A — Local MongoDB + Compass (easiest, no signup)
-
-1. Download **MongoDB Community Server** and tick **“Install MongoDB Compass”**
-   in the installer: <https://www.mongodb.com/try/download/community>
-2. Finish the installer. MongoDB runs as a Windows service on port `27017`
-   (check it under `services.msc` if needed).
-3. In `.env`:
+1. Create a free project at [supabase.com](https://supabase.com/dashboard).
+2. **SQL Editor** → run [supabase/schema.sql](supabase/schema.sql) — creates
+   the `courses`, `inquiries` and `activity` tables, security policies, the
+   `uploads` storage bucket, and seeds the course catalogue.
+3. **Project Settings → API Keys** → copy three values into `.env`:
 
    ```env
-   MONGODB_URI=mongodb://localhost:27017
-   MONGODB_DB=navya_computech
+   NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_xxxx
+   SUPABASE_SERVICE_ROLE_KEY=sb_secret_xxxx
    ```
 
-4. Seed the starter courses and indexes:
+4. Restart `npm run dev`.
 
-   ```bash
-   npm run seed
-   ```
-
-5. Open **Compass** → paste `mongodb://localhost:27017` → **Connect** → open the
-   **`navya_computech`** database. You'll see the `courses`, `inquiries` and
-   `activity` collections and can browse/edit documents directly.
-
-### Option B — MongoDB Atlas (cloud — required for Vercel)
-
-1. Free **M0** cluster at [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas).
-2. **Database Access** → add a database user (username + password).
-3. **Network Access** → Add IP → *Allow access from anywhere* (`0.0.0.0/0`).
-4. **Connect → Drivers** → copy the string, replace `<password>`, put it in `.env`:
-
-   ```env
-   MONGODB_URI=mongodb+srv://user:pass@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
-   ```
-
-5. Run `npm run seed`. Compass opens that **same** connection string, so you can
-   browse your cloud data with the identical GUI.
-
-Restart the server after changing `.env`. The site then reads courses from the
-database, and queries are saved and visible in the admin panel.
-
-**Collections created:** `courses`, `inquiries`, `activity`.
-
-> Local is great for development; switch `MONGODB_URI` to Atlas when you deploy
-> (Vercel can't reach a database on your PC).
+The admin panel now reads and writes Supabase, and you can browse/edit the
+data any time in the dashboard's **Table Editor**. Leave the vars blank and
+the site falls back to demo mode (local JSON files) — but note that **on a
+deployed host the filesystem is read-only**, so without Supabase, admin edits
+on the live site silently revert.
 
 ---
 
@@ -136,9 +109,9 @@ cookie valid for 7 days. Leave these blank and `/admin` stays open in dev mode
 
 ## ✏️ Editing content
 
-**Courses** are managed from the **admin panel** once Atlas is connected — no
-code changes needed, and edits appear on the site within ~5 minutes (ISR) or
-immediately on the next request after saving.
+**Courses** are managed from the **admin panel** once Supabase is connected —
+no code changes needed, and edits appear on the site within ~5 minutes (ISR)
+or immediately on the next request after saving.
 
 Everything else lives in [`lib/data.ts`](lib/data.ts):
 
@@ -149,7 +122,7 @@ Everything else lives in [`lib/data.ts`](lib/data.ts):
 | `STATS` | The blue stats band |
 | `WHY_US` / `BENEFITS` | "Why Choose Us" content |
 | `FAQS` | The FAQ accordion |
-| `COURSES` | Fallback sample catalogue used before Atlas is connected |
+| `COURSES` | Fallback sample catalogue used before Supabase is connected |
 
 Social links are in [`components/site-footer.tsx`](components/site-footer.tsx) —
 icons stay hidden until you add real URLs.
@@ -177,12 +150,12 @@ components/
   admin/                    Shell, forms, controls, primitives
   ui/                       button, card, badge, input, textarea, label, select
 lib/
-  mongodb.ts                Atlas connection (cached)
-  db.ts                     Data access + fallbacks
+  supabase.ts               Supabase connection (cached, server-only)
+  db.ts                     Data access — Supabase, or JSON files in demo mode
   auth.ts                   Admin session (HMAC cookie)
   icons.ts                  Icon registry (DB stores a string key)
   data.ts                   Site content + sample fallbacks
-scripts/seed.mjs            Seeds Atlas
+supabase/schema.sql         One-shot Supabase setup: tables, RLS, bucket, seed
 ```
 
 ---
@@ -195,8 +168,9 @@ and Development), then **Redeploy** — env changes only apply to new builds.
 
 | Variable | Value to use on Vercel |
 |----------|------------------------|
-| `MONGODB_URI` | Your **Atlas** string. The short `mongodb+srv://...` form is fine here (Vercel's DNS resolves SRV correctly). |
-| `MONGODB_DB` | `navya_computech` |
+| `NEXT_PUBLIC_SUPABASE_URL` | Your project URL, e.g. `https://xxxx.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | The **publishable / anon** key |
+| `SUPABASE_SERVICE_ROLE_KEY` | The **secret / service_role** key |
 | `ADMIN_EMAIL` | The email you'll sign in to `/admin` with |
 | `ADMIN_PASSWORD` | A **strong** password — not the one used locally |
 | `AUTH_SECRET` | A **fresh** random value (see below) — never the placeholder |
@@ -208,19 +182,14 @@ Generate a production `AUTH_SECRET`:
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-### Two things that will break the deploy if missed
+### Two things that will break the live site if missed
 
-1. **Atlas Network Access** — Vercel's IPs are dynamic, so you must allow
-   `0.0.0.0/0` (Atlas → Network Access → Add IP → *Allow access from anywhere*).
-   Without it every request times out.
-2. **A local `MONGODB_URI` won't work.** `mongodb://localhost:27017` points at
-   *your PC* — a deployed site can't reach it. Use the Atlas string.
-
-> **Note on the SRV vs non-SRV string:** this project's local `.env` uses the
-> long non-SRV form (`mongodb://host-00,host-01,host-02/?replicaSet=...`)
-> because Node's SRV DNS lookup is blocked on the dev machine. On Vercel either
-> form works — prefer the short `mongodb+srv://` one there, as it keeps working
-> if Atlas ever changes the cluster's shard hostnames.
+1. **The Supabase variables are not optional in production.** Without them the
+   app falls back to JSON files on a read-only filesystem — the admin panel's
+   Live/Popular toggles, edits and uploads will silently revert.
+2. **Set the three `ADMIN_*` / `AUTH_SECRET` variables.** If they're missing,
+   `/admin` runs in open dev mode — anyone who finds the URL can edit your
+   site.
 
 ---
 

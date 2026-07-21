@@ -16,8 +16,11 @@ import {
   deleteCourseById,
   getCourseById,
   setInquiryStatus,
+
   deleteInquiryById,
+  deleteChatTalkById,
   logActivity,
+
   type InquiryStatus,
   type CourseInput,
 } from "@/lib/db";
@@ -233,3 +236,19 @@ export async function deleteCourse(id: string): Promise<ActionResult> {
     return { ok: false, error: (e as Error).message };
   }
 }
+
+export async function deleteChatTalk(id: string): Promise<ActionResult> {
+  const actor = await requireAdmin();
+
+  try {
+    await deleteChatTalkById(id);
+    await logActivity("chat_talk_deleted", "Chat conversation log deleted", {
+      actor: actor ?? "admin",
+    });
+    revalidateAdmin("/admin/chats", "/admin/activity");
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: (e as Error).message };
+  }
+}
+

@@ -11,6 +11,7 @@ import { Contact } from "@/components/sections/contact";
 import { SiteFooter } from "@/components/site-footer";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { AdminFab } from "@/components/admin-fab";
+import { Chatbot } from "@/components/chatbot/chatbot";
 import { BackToTop } from "@/components/back-to-top";
 import { OrganizationJsonLd, FaqJsonLd } from "@/components/json-ld";
 import { getPublicCourses } from "@/lib/db";
@@ -43,6 +44,7 @@ export default async function HomePage() {
       <SiteFooter />
       <WhatsAppFab />
       <AdminFab />
+      <Chatbot />
       <BackToTop />
     </>
   );

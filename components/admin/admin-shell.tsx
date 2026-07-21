@@ -8,6 +8,7 @@ import {
   Inbox,
   BookOpen,
   Activity,
+  MessageSquare,
   GraduationCap,
   ExternalLink,
   ShieldAlert,
@@ -15,14 +16,20 @@ import {
   X,
 } from "lucide-react";
 import { LogoutButton } from "@/components/admin/logout-button";
+import { RefreshAdminButton } from "@/components/admin/refresh-button";
 import { cn } from "@/lib/utils";
+
 
 const NAV = [
   { label: "Overview", href: "/admin", icon: LayoutDashboard },
   { label: "Queries", href: "/admin/inquiries", icon: Inbox },
+  { label: "Library Seats", href: "/admin/library", icon: BookOpen },
   { label: "Courses", href: "/admin/courses", icon: BookOpen },
+  { label: "Chat Talks", href: "/admin/chats", icon: MessageSquare },
   { label: "Activity", href: "/admin/activity", icon: Activity },
 ];
+
+
 
 export function AdminShell({
   email,
@@ -134,6 +141,7 @@ export function AdminShell({
             </p>
           </div>
           <div className="flex items-center gap-2">
+            <RefreshAdminButton />
             {devMode && (
               <span className="hidden items-center gap-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 px-2.5 py-1 text-xs font-medium text-amber-700 dark:text-amber-400 sm:inline-flex">
                 <ShieldAlert className="h-3.5 w-3.5" />
@@ -142,6 +150,7 @@ export function AdminShell({
             )}
             <LogoutButton />
           </div>
+
         </header>
 
         <main className="flex-1 bg-secondary/30 p-4 sm:p-6 lg:p-8">{children}</main>

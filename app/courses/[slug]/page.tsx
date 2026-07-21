@@ -20,6 +20,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { BackToTop } from "@/components/back-to-top";
+import { Chatbot } from "@/components/chatbot/chatbot";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -374,6 +375,7 @@ export default async function CoursePage({
       </main>
       <SiteFooter />
       <WhatsAppFab />
+      <Chatbot />
       <BackToTop />
     </>
   );

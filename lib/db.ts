@@ -4,6 +4,7 @@ import path from "path";
 import { randomUUID } from "crypto";
 import { COURSES, type Course } from "@/lib/data";
 import type { IconKey } from "@/lib/icons";
+import { getSupabase } from "@/lib/supabase";
 
 /* --------------------------------- Types ---------------------------------- */
 
@@ -37,18 +38,120 @@ export type ActivityDoc = {
   createdAt: string;
 };
 
+export type ChatTalkDoc = {
+  _id: string;
+  userQuestion: string;
+  botReply: string;
+  score?: 1 | -1 | null;
+  courseSlug?: string | null;
+  isAi?: boolean;
+  createdAt: string;
+};
+
+/* -------------------------------- Supabase --------------------------------- */
+
+
+/**
+ * When the Supabase env vars are set (see SUPABASE.md), all data lives in
+ * hosted Postgres — this is REQUIRED for the deployed site, because serverless
+ * filesystems are read-only and the JSON-file fallback below can't persist
+ * admin edits there. Without the env vars the site runs in demo mode on the
+ * local JSON files, so `npm run dev` works out of the box.
+ *
+ * Postgres columns are snake_case; these helpers map rows to the camelCase
+ * shapes the app uses. Tables are created by supabase/schema.sql.
+ */
+
+type CourseRow = {
+  id: string;
+  slug: string;
+  title: string;
+  icon: string;
+  tagline: string;
+  duration: string;
+  batch_size: string;
+  level: string;
+  certification: string;
+  syllabus: string[] | null;
+  careers: string[] | null;
+  featured: boolean;
+  is_active: boolean;
+  sort_order: number;
+  image: string | null;
+  document: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+function rowToCourse(row: CourseRow): CourseDoc {
+  return {
+    _id: row.id,
+    slug: row.slug,
+    title: row.title,
+    icon: row.icon as IconKey,
+    tagline: row.tagline,
+    duration: row.duration,
+    batchSize: row.batch_size,
+    level: row.level,
+    certification: row.certification,
+    syllabus: row.syllabus ?? [],
+    careers: row.careers ?? [],
+    featured: row.featured,
+    image: row.image,
+    document: row.document,
+    isActive: row.is_active,
+    sortOrder: row.sort_order,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+function courseToRow(input: CourseInput) {
+  return {
+    slug: input.slug,
+    title: input.title,
+    icon: input.icon,
+    tagline: input.tagline,
+    duration: input.duration,
+    batch_size: input.batchSize,
+    level: input.level,
+    certification: input.certification,
+    syllabus: input.syllabus,
+    careers: input.careers,
+    featured: input.featured,
+    is_active: input.isActive,
+    sort_order: input.sortOrder,
+    image: input.image,
+    document: input.document,
+  };
+}
+
+type SbError = { code?: string; message: string } | null;
+
+/** Postgres error codes worth translating for the admin UI. */
+const PG_UNIQUE_VIOLATION = "23505";
+const PG_INVALID_UUID = "22P02";
+
+/** Throws a friendly error for a Supabase failure (never returns). */
+function fail(error: NonNullable<SbError>, context: string): never {
+  if (error.code === PG_UNIQUE_VIOLATION) {
+    throw new Error("A course with that slug already exists.");
+  }
+  throw new Error(`${context}: ${error.message}`);
+}
+
 /* --------------------------------- Storage --------------------------------- */
 
 /**
- * All data lives in plain JSON files inside the project's `data/` folder — no
- * database needed. The files are created automatically on first use, and the
- * course catalogue is seeded from the samples in lib/data.ts, so the admin
- * panel works out of the box. Open the files in any editor to inspect data.
+ * DEMO-MODE FALLBACK — used only when Supabase isn't configured. Data lives in
+ * plain JSON files inside the project's `data/` folder. The files are created
+ * automatically on first use, and the course catalogue is seeded from the
+ * samples in lib/data.ts, so the admin panel works out of the box locally.
  *
  * On serverless hosts (e.g. Vercel) the filesystem is read-only, so the first
- * failed write flips storage over to an in-memory copy kept on globalThis.
- * The bundled data/courses.json still serves the real catalogue; queries and
- * edits made on the live site last only as long as the server instance.
+ * failed write flips storage over to an in-memory copy kept on globalThis —
+ * edits made on the live site LAST ONLY MINUTES and silently revert. Connect
+ * Supabase (see SUPABASE.md) before deploying.
  */
 const DATA_DIR = path.join(process.cwd(), "data");
 
@@ -56,7 +159,9 @@ const FILES = {
   courses: path.join(DATA_DIR, "courses.json"),
   inquiries: path.join(DATA_DIR, "inquiries.json"),
   activity: path.join(DATA_DIR, "activity.json"),
+  chats: path.join(DATA_DIR, "chats.json"),
 } as const;
+
 
 /** Newest activity entries kept on disk — stops the log growing forever. */
 const ACTIVITY_CAP = 500;
@@ -166,22 +271,71 @@ function courseSort(a: CourseDoc, b: CourseDoc): number {
 
 /** Courses shown on the public site (active only). */
 export async function getPublicCourses(): Promise<Course[]> {
+  const sb = getSupabase();
+  if (sb) {
+    const { data, error } = await sb
+      .from("courses")
+      .select("*")
+      .eq("is_active", true)
+      .order("sort_order", { ascending: true })
+      .order("title", { ascending: true });
+    if (error) fail(error, "Could not load courses");
+    return (data as CourseRow[]).map(rowToCourse);
+  }
+
   const list = await loadCourses();
   return list.filter((c) => c.isActive !== false).sort(courseSort);
 }
 
 export async function getPublicCourse(slug: string): Promise<Course | undefined> {
+  const sb = getSupabase();
+  if (sb) {
+    const { data, error } = await sb
+      .from("courses")
+      .select("*")
+      .eq("slug", slug)
+      .eq("is_active", true)
+      .maybeSingle();
+    if (error) fail(error, "Could not load the course");
+    return data ? rowToCourse(data as CourseRow) : undefined;
+  }
+
   const list = await loadCourses();
   return list.find((c) => c.slug === slug && c.isActive !== false);
 }
 
 /** Every course including hidden ones — admin only. */
 export async function getAllCourses(): Promise<CourseDoc[]> {
+  const sb = getSupabase();
+  if (sb) {
+    const { data, error } = await sb
+      .from("courses")
+      .select("*")
+      .order("sort_order", { ascending: true })
+      .order("title", { ascending: true });
+    if (error) fail(error, "Could not load courses");
+    return (data as CourseRow[]).map(rowToCourse);
+  }
+
   const list = await loadCourses();
   return [...list].sort(courseSort);
 }
 
 export async function getCourseById(id: string): Promise<CourseDoc | null> {
+  const sb = getSupabase();
+  if (sb) {
+    const { data, error } = await sb
+      .from("courses")
+      .select("*")
+      .eq("id", id)
+      .maybeSingle();
+    // A malformed id (e.g. one left over from the file store) is "not found",
+    // not a crash — Postgres rejects non-UUID strings outright.
+    if (error && error.code === PG_INVALID_UUID) return null;
+    if (error) fail(error, "Could not load the course");
+    return data ? rowToCourse(data as CourseRow) : null;
+  }
+
   const list = await loadCourses();
   return list.find((c) => c._id === id) ?? null;
 }
@@ -205,6 +359,13 @@ export type CourseInput = {
 };
 
 export async function createCourse(input: CourseInput) {
+  const sb = getSupabase();
+  if (sb) {
+    const { error } = await sb.from("courses").insert(courseToRow(input));
+    if (error) fail(error, "Could not create the course");
+    return;
+  }
+
   await mutate(FILES.courses, seedCourses, (list) => {
     if (list.some((c) => c.slug === input.slug)) {
       throw new Error(`A course with slug "${input.slug}" already exists.`);
@@ -215,6 +376,20 @@ export async function createCourse(input: CourseInput) {
 }
 
 export async function updateCourse(id: string, input: CourseInput) {
+  const sb = getSupabase();
+  if (sb) {
+    const { data, error } = await sb
+      .from("courses")
+      .update({ ...courseToRow(input), updated_at: new Date().toISOString() })
+      .eq("id", id)
+      .select("id");
+    if (error && error.code === PG_INVALID_UUID)
+      throw new Error("Course not found.");
+    if (error) fail(error, "Could not save the course");
+    if (!data || data.length === 0) throw new Error("Course not found.");
+    return;
+  }
+
   await mutate(FILES.courses, seedCourses, (list) => {
     if (list.some((c) => c.slug === input.slug && c._id !== id)) {
       throw new Error(`Another course already uses slug "${input.slug}".`);
@@ -230,6 +405,21 @@ export async function setCourseField(
   field: "isActive" | "featured",
   value: boolean,
 ) {
+  const sb = getSupabase();
+  if (sb) {
+    const column = field === "isActive" ? "is_active" : "featured";
+    const { data, error } = await sb
+      .from("courses")
+      .update({ [column]: value, updated_at: new Date().toISOString() })
+      .eq("id", id)
+      .select("id");
+    if (error && error.code === PG_INVALID_UUID)
+      throw new Error("Course not found.");
+    if (error) fail(error, "Could not update the course");
+    if (!data || data.length === 0) throw new Error("Course not found.");
+    return;
+  }
+
   await mutate(FILES.courses, seedCourses, (list) => {
     const course = list.find((c) => c._id === id);
     if (!course) throw new Error("Course not found.");
@@ -239,6 +429,14 @@ export async function setCourseField(
 }
 
 export async function deleteCourseById(id: string) {
+  const sb = getSupabase();
+  if (sb) {
+    const { error } = await sb.from("courses").delete().eq("id", id);
+    if (error && error.code === PG_INVALID_UUID) return;
+    if (error) fail(error, "Could not delete the course");
+    return;
+  }
+
   await mutate(FILES.courses, seedCourses, (list) => {
     const idx = list.findIndex((c) => c._id === id);
     if (idx !== -1) list.splice(idx, 1);
@@ -247,6 +445,30 @@ export async function deleteCourseById(id: string) {
 
 /* -------------------------------- Inquiries ------------------------------- */
 
+type InquiryRow = {
+  id: string;
+  full_name: string;
+  phone: string;
+  email: string | null;
+  preferred_course: string | null;
+  message: string | null;
+  status: InquiryStatus;
+  created_at: string;
+};
+
+function rowToInquiry(row: InquiryRow): InquiryDoc {
+  return {
+    _id: row.id,
+    fullName: row.full_name,
+    phone: row.phone,
+    email: row.email,
+    preferredCourse: row.preferred_course,
+    message: row.message,
+    status: row.status,
+    createdAt: row.created_at,
+  };
+}
+
 export async function createInquiry(input: {
   fullName: string;
   phone: string;
@@ -254,6 +476,20 @@ export async function createInquiry(input: {
   preferredCourse?: string | null;
   message?: string | null;
 }) {
+  const sb = getSupabase();
+  if (sb) {
+    const { error } = await sb.from("inquiries").insert({
+      full_name: input.fullName,
+      phone: input.phone,
+      email: input.email ?? null,
+      preferred_course: input.preferredCourse ?? null,
+      message: input.message ?? null,
+      status: "new",
+    });
+    if (error) fail(error, "Could not save your query");
+    return;
+  }
+
   await mutate<InquiryDoc, void>(FILES.inquiries, empty, (list) => {
     list.unshift({
       ...input,
@@ -268,11 +504,35 @@ export async function createInquiry(input: {
 }
 
 export async function getInquiries(): Promise<InquiryDoc[]> {
+  const sb = getSupabase();
+  if (sb) {
+    const { data, error } = await sb
+      .from("inquiries")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error) fail(error, "Could not load queries");
+    return (data as InquiryRow[]).map(rowToInquiry);
+  }
+
   const list = (await readList<InquiryDoc>(FILES.inquiries)) ?? [];
   return [...list].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 
 export async function setInquiryStatus(id: string, status: InquiryStatus) {
+  const sb = getSupabase();
+  if (sb) {
+    const { data, error } = await sb
+      .from("inquiries")
+      .update({ status })
+      .eq("id", id)
+      .select("id");
+    if (error && error.code === PG_INVALID_UUID)
+      throw new Error("Query not found.");
+    if (error) fail(error, "Could not update the query");
+    if (!data || data.length === 0) throw new Error("Query not found.");
+    return;
+  }
+
   await mutate<InquiryDoc, void>(FILES.inquiries, empty, (list) => {
     const inquiry = list.find((q) => q._id === id);
     if (!inquiry) throw new Error("Query not found.");
@@ -281,6 +541,14 @@ export async function setInquiryStatus(id: string, status: InquiryStatus) {
 }
 
 export async function deleteInquiryById(id: string) {
+  const sb = getSupabase();
+  if (sb) {
+    const { error } = await sb.from("inquiries").delete().eq("id", id);
+    if (error && error.code === PG_INVALID_UUID) return;
+    if (error) fail(error, "Could not delete the query");
+    return;
+  }
+
   await mutate<InquiryDoc, void>(FILES.inquiries, empty, (list) => {
     const idx = list.findIndex((q) => q._id === id);
     if (idx !== -1) list.splice(idx, 1);
@@ -288,6 +556,15 @@ export async function deleteInquiryById(id: string) {
 }
 
 /* -------------------------------- Activity -------------------------------- */
+
+type ActivityRow = {
+  id: string;
+  type: string;
+  summary: string;
+  detail: string | null;
+  actor: string;
+  created_at: string;
+};
 
 /**
  * Records a site/admin event. Never throws — logging must not break the action
@@ -299,6 +576,17 @@ export async function logActivity(
   opts: { detail?: string; actor?: string } = {},
 ) {
   try {
+    const sb = getSupabase();
+    if (sb) {
+      await sb.from("activity").insert({
+        type,
+        summary,
+        detail: opts.detail ?? null,
+        actor: opts.actor ?? "visitor",
+      });
+      return;
+    }
+
     await mutate<ActivityDoc, void>(FILES.activity, empty, (list) => {
       list.unshift({
         _id: randomUUID(),
@@ -316,6 +604,24 @@ export async function logActivity(
 }
 
 export async function getActivity(limit = 200): Promise<ActivityDoc[]> {
+  const sb = getSupabase();
+  if (sb) {
+    const { data, error } = await sb
+      .from("activity")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(limit);
+    if (error) fail(error, "Could not load activity");
+    return (data as ActivityRow[]).map((row) => ({
+      _id: row.id,
+      type: row.type,
+      summary: row.summary,
+      detail: row.detail,
+      actor: row.actor,
+      createdAt: row.created_at,
+    }));
+  }
+
   const list = (await readList<ActivityDoc>(FILES.activity)) ?? [];
   return [...list]
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
@@ -325,6 +631,31 @@ export async function getActivity(limit = 200): Promise<ActivityDoc[]> {
 /* --------------------------------- Counts --------------------------------- */
 
 export async function getCounts() {
+  const sb = getSupabase();
+  if (sb) {
+    const [inquiries, newInquiries, courses, activity] = await Promise.all([
+      sb.from("inquiries").select("*", { count: "exact", head: true }),
+      sb
+        .from("inquiries")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "new"),
+      sb
+        .from("courses")
+        .select("*", { count: "exact", head: true })
+        .eq("is_active", true),
+      sb.from("activity").select("*", { count: "exact", head: true }),
+    ]);
+    const firstError =
+      inquiries.error ?? newInquiries.error ?? courses.error ?? activity.error;
+    if (firstError) fail(firstError, "Could not load the dashboard counts");
+    return {
+      inquiries: inquiries.count ?? 0,
+      newInquiries: newInquiries.count ?? 0,
+      courses: courses.count ?? 0,
+      activity: activity.count ?? 0,
+    };
+  }
+
   const [courses, inquiries, activity] = await Promise.all([
     loadCourses(),
     getInquiries(),
@@ -337,3 +668,125 @@ export async function getCounts() {
     activity: activity.length,
   };
 }
+
+/* ------------------------------- Chat Talks -------------------------------- */
+
+export async function getChatTalks(): Promise<ChatTalkDoc[]> {
+  const sb = getSupabase();
+  if (sb) {
+    const { data, error } = await sb
+      .from("chat_talks")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error) fail(error, "Could not load chat talks");
+    return (data ?? []).map((row: any) => ({
+      _id: row.id,
+      userQuestion: row.user_question,
+      botReply: row.bot_reply,
+      score: row.score,
+      courseSlug: row.course_slug,
+      isAi: row.is_ai,
+      createdAt: row.created_at,
+    }));
+  }
+
+  const list = (await readList<ChatTalkDoc>(FILES.chats)) ?? [];
+  return [...list].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+export async function recordChatTalk(input: {
+  id?: string;
+  userQuestion: string;
+  botReply: string;
+  courseSlug?: string | null;
+  isAi?: boolean;
+}): Promise<ChatTalkDoc> {
+  const now = new Date().toISOString();
+  const id = input.id ?? randomUUID();
+
+  const doc: ChatTalkDoc = {
+    _id: id,
+    userQuestion: input.userQuestion,
+    botReply: input.botReply,
+    score: null,
+    courseSlug: input.courseSlug ?? null,
+    isAi: input.isAi ?? false,
+    createdAt: now,
+  };
+
+  const sb = getSupabase();
+  if (sb) {
+    const { error } = await sb.from("chat_talks").insert({
+      id,
+      user_question: doc.userQuestion,
+      bot_reply: doc.botReply,
+      score: doc.score,
+      course_slug: doc.courseSlug,
+      is_ai: doc.isAi,
+      created_at: now,
+    });
+    if (error) fail(error, "Could not record chat talk");
+    return doc;
+  }
+
+  const list = (await readList<ChatTalkDoc>(FILES.chats)) ?? [];
+  await writeList(FILES.chats, [doc, ...list]);
+  return doc;
+}
+
+export async function updateChatTalkScore(
+  id: string,
+  score: 1 | -1
+): Promise<ChatTalkDoc | null> {
+  const sb = getSupabase();
+  if (sb) {
+    const { data, error } = await sb
+      .from("chat_talks")
+      .update({ score })
+      .eq("id", id)
+      .select()
+      .maybeSingle();
+    if (error) fail(error, "Could not update talk feedback score");
+    if (!data) return null;
+    return {
+      _id: data.id,
+      userQuestion: data.user_question,
+      botReply: data.bot_reply,
+      score: data.score,
+      courseSlug: data.course_slug,
+      isAi: data.is_ai,
+      createdAt: data.created_at,
+    };
+  }
+
+  const list = (await readList<ChatTalkDoc>(FILES.chats)) ?? [];
+  let updated: ChatTalkDoc | null = null;
+  const nextList = list.map((item) => {
+    if (item._id === id) {
+      updated = { ...item, score };
+      return updated;
+    }
+    return item;
+  });
+
+  if (updated) {
+    await writeList(FILES.chats, nextList);
+  }
+  return updated;
+}
+
+export async function deleteChatTalkById(id: string) {
+  const sb = getSupabase();
+  if (sb) {
+    const { error } = await sb.from("chat_talks").delete().eq("id", id);
+    if (error && error.code === PG_INVALID_UUID) return;
+    if (error) fail(error, "Could not delete chat talk");
+    return;
+  }
+
+  const list = (await readList<ChatTalkDoc>(FILES.chats)) ?? [];
+  const nextList = list.filter((item) => item._id !== id);
+  await writeList(FILES.chats, nextList);
+}
+
+

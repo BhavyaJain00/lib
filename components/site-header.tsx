@@ -2,11 +2,14 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { GraduationCap, Menu, Phone, X } from "lucide-react";
+import { GraduationCap, Menu, Phone, X, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { RefreshIconButton } from "@/components/admin/refresh-button";
 import { NAV_LINKS, CONTACT } from "@/lib/data";
 import { cn } from "@/lib/utils";
+
+
 
 export function SiteHeader() {
   const [open, setOpen] = React.useState(false);
@@ -54,6 +57,17 @@ export function SiteHeader() {
               {link.label}
             </Link>
           ))}
+          <Link
+            href="/library"
+            className="ml-1.5 inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1.5 text-xs font-bold text-emerald-700 transition-all hover:scale-105 hover:bg-emerald-500/20 dark:text-emerald-300 shadow-sm"
+          >
+            <BookOpen className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 animate-pulse" />
+            <span>Library 📚</span>
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+            </span>
+          </Link>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -69,6 +83,7 @@ export function SiteHeader() {
             </a>
           </Button>
           <ThemeToggle />
+          <RefreshIconButton />
           <Button asChild className="hidden sm:inline-flex">
             <Link href="/#admissions">Enroll Now</Link>
           </Button>
@@ -99,6 +114,19 @@ export function SiteHeader() {
                 {link.label}
               </Link>
             ))}
+            <Link
+              href="/library"
+              onClick={() => setOpen(false)}
+              className="my-1 flex items-center justify-between rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-3 text-[15px] font-bold text-emerald-700 dark:text-emerald-300"
+            >
+              <span className="flex items-center gap-2">
+                <BookOpen className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                Navya Library Sub-Site 📚
+              </span>
+              <span className="rounded-full bg-emerald-500 px-2 py-0.5 text-[10px] font-extrabold text-white uppercase">
+                New
+              </span>
+            </Link>
             <div className="mt-2 flex flex-col gap-2">
               <Button asChild variant="outline" onClick={() => setOpen(false)}>
                 <a href={CONTACT.phoneHref}>
@@ -116,3 +144,4 @@ export function SiteHeader() {
     </header>
   );
 }
+
