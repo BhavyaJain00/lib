@@ -111,14 +111,15 @@ export function Inquiry({ courseTitles }: { courseTitles: string[] }) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="preferredCourse">Preferred Course</Label>
+                <Label htmlFor="preferredCourse">Preferred Course / Program</Label>
                 <Select
                   id="preferredCourse"
                   name="preferredCourse"
                   defaultValue=""
                   disabled={isPending}
                 >
-                  <option value="">Select a course</option>
+                  <option value="">Select a course or library seat</option>
+                  <option value="Navya Library (AC Reading Hall)">Navya Library (AC Reading Hall Seat)</option>
                   {courseTitles.map((title) => (
                     <option key={title} value={title}>
                       {title}

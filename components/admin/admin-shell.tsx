@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   Inbox,
   BookOpen,
+  Building2,
   Activity,
   MessageSquare,
   GraduationCap,
@@ -19,11 +20,10 @@ import { LogoutButton } from "@/components/admin/logout-button";
 import { RefreshAdminButton } from "@/components/admin/refresh-button";
 import { cn } from "@/lib/utils";
 
-
 const NAV = [
   { label: "Overview", href: "/admin", icon: LayoutDashboard },
   { label: "Queries", href: "/admin/inquiries", icon: Inbox },
-  { label: "Library Seats", href: "/admin/library", icon: BookOpen },
+  { label: "Library Seats", href: "/admin/library", icon: Building2 },
   { label: "Courses", href: "/admin/courses", icon: BookOpen },
   { label: "Chat Talks", href: "/admin/chats", icon: MessageSquare },
   { label: "Activity", href: "/admin/activity", icon: Activity },

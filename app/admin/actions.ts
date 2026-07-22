@@ -39,8 +39,9 @@ function lines(value: string): string[] {
 
 /** Busts the cache for every public page that shows the catalogue. */
 function revalidatePublic() {
-  revalidatePath("/");
+  revalidatePath("/", "layout");
   revalidatePath("/courses/[slug]", "page");
+  revalidatePath("/library", "page");
   revalidatePath("/sitemap.xml");
 }
 

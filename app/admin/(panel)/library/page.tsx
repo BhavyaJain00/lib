@@ -34,7 +34,10 @@ export default async function AdminLibraryPage() {
     (q) =>
       q.preferredCourse?.toLowerCase().includes("library") ||
       q.preferredCourse?.toLowerCase().includes("seat") ||
-      q.message?.toLowerCase().includes("shift")
+      q.preferredCourse?.toLowerCase().includes("reading") ||
+      q.message?.toLowerCase().includes("shift") ||
+      q.message?.toLowerCase().includes("library") ||
+      q.message?.toLowerCase().includes("trial")
   );
 
   const newInquiries = libraryInquiries.filter((q) => q.status === "new");

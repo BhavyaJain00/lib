@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { GraduationCap, Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { NAV_LINKS, COURSES, CONTACT } from "@/lib/data";
+import { NAV_LINKS, CONTACT } from "@/lib/data";
+import { getPublicCourses } from "@/lib/db";
 
 // Add your real profile URLs here — icons with an empty href are hidden
 // automatically, so no dead links ever ship.
@@ -28,7 +29,9 @@ const SOCIALS = [
   },
 ];
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const courses = await getPublicCourses();
+
   return (
     <footer className="border-t border-border bg-card">
       <div className="container-page py-8 sm:py-14">
@@ -93,7 +96,7 @@ export function SiteFooter() {
           <div>
             <h4 className="text-sm font-semibold">Our Courses</h4>
             <ul className="mt-4 space-y-2.5">
-              {COURSES.map((c) => (
+              {courses.map((c) => (
                 <li key={c.slug}>
                   <Link
                     href={`/courses/${c.slug}`}

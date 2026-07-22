@@ -3,9 +3,11 @@ import {
   Inbox,
   BookOpen,
   Activity as ActivityIcon,
+  MessageSquare,
   ArrowRight,
   Clock,
   AlertCircle,
+  Building2,
 } from "lucide-react";
 import { getCounts, getInquiries, getActivity } from "@/lib/db";
 import {
@@ -31,15 +33,27 @@ export default async function AdminOverviewPage() {
     <div>
       <PageHeader
         title="Overview"
-        description="A snapshot of queries, courses and everything happening on the site."
+        description="A live snapshot of queries, seat bookings, chatbot interactions, and course updates."
       />
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <StatCard
           label="Total Queries"
           value={counts.inquiries}
           icon={Inbox}
           hint={`${counts.newInquiries} new / unhandled`}
+        />
+        <StatCard
+          label="Library Requests"
+          value={counts.libraryInquiries}
+          icon={Building2}
+          hint="Seat reservations"
+        />
+        <StatCard
+          label="Chatbot Talks"
+          value={counts.chats}
+          icon={MessageSquare}
+          hint="Conversations logged"
         />
         <StatCard label="Live Courses" value={counts.courses} icon={BookOpen} />
         <StatCard

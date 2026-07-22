@@ -203,6 +203,7 @@ async function readList<T>(file: string): Promise<T[] | null> {
 // leave a half-written (corrupt) JSON file behind. If the disk can't be
 // written at all (read-only serverless host), keep the list in memory instead.
 async function writeList(file: string, list: unknown[]): Promise<void> {
+  memStore().set(file, list);
   if (!globalForStore._fsReadOnly) {
     try {
       await fs.mkdir(DATA_DIR, { recursive: true });
@@ -214,14 +215,24 @@ async function writeList(file: string, list: unknown[]): Promise<void> {
       globalForStore._fsReadOnly = true;
     }
   }
-  memStore().set(file, list);
 }
+
+const SEED_COURSE_IDS: Record<string, string> = {
+  rscit: "f927265c-eec6-44ae-a383-afb258fe32eb",
+  "basic-computer": "570dfc9a-a994-4fa7-b0ba-927cca503ed2",
+  "advance-computer": "89d39f1d-4e94-4ac5-a0e0-26659cab5178",
+  "tally-gst": "a1b2c3d4-e5f6-47a8-b9c0-112233445566",
+  "web-designing": "b2c3d4e5-f6a7-48b9-c0d1-223344556677",
+  "python-programming": "c3d4e5f6-a7b8-49c0-d1e2-334455667788",
+  "cpp-programming": "d4e5f6a7-b8c9-40d1-e2f3-445566778899",
+  "dca-pgdca": "e5f6a7b8-c9d0-41e2-f3a4-556677889900",
+};
 
 function seedCourses(): CourseDoc[] {
   const now = new Date().toISOString();
   return COURSES.map((c, i) => ({
     ...c,
-    _id: randomUUID(),
+    _id: SEED_COURSE_IDS[c.slug] || randomUUID(),
     featured: c.featured ?? false,
     isActive: true,
     sortOrder: i,
@@ -391,10 +402,10 @@ export async function updateCourse(id: string, input: CourseInput) {
   }
 
   await mutate(FILES.courses, seedCourses, (list) => {
-    if (list.some((c) => c.slug === input.slug && c._id !== id)) {
+    if (list.some((c) => c.slug === input.slug && c._id !== id && c.slug !== id)) {
       throw new Error(`Another course already uses slug "${input.slug}".`);
     }
-    const idx = list.findIndex((c) => c._id === id);
+    const idx = list.findIndex((c) => c._id === id || c.slug === id);
     if (idx === -1) throw new Error("Course not found.");
     list[idx] = { ...list[idx], ...input, updatedAt: new Date().toISOString() };
   });
@@ -421,7 +432,7 @@ export async function setCourseField(
   }
 
   await mutate(FILES.courses, seedCourses, (list) => {
-    const course = list.find((c) => c._id === id);
+    const course = list.find((c) => c._id === id || c.slug === id);
     if (!course) throw new Error("Course not found.");
     course[field] = value;
     course.updatedAt = new Date().toISOString();
@@ -438,8 +449,9 @@ export async function deleteCourseById(id: string) {
   }
 
   await mutate(FILES.courses, seedCourses, (list) => {
-    const idx = list.findIndex((c) => c._id === id);
-    if (idx !== -1) list.splice(idx, 1);
+    const idx = list.findIndex((c) => c._id === id || c.slug === id);
+    if (idx === -1) throw new Error("Course not found.");
+    list.splice(idx, 1);
   });
 }
 
@@ -633,7 +645,7 @@ export async function getActivity(limit = 200): Promise<ActivityDoc[]> {
 export async function getCounts() {
   const sb = getSupabase();
   if (sb) {
-    const [inquiries, newInquiries, courses, activity] = await Promise.all([
+    const [inquiries, newInquiries, courses, activity, chats] = await Promise.all([
       sb.from("inquiries").select("*", { count: "exact", head: true }),
       sb
         .from("inquiries")
@@ -644,28 +656,48 @@ export async function getCounts() {
         .select("*", { count: "exact", head: true })
         .eq("is_active", true),
       sb.from("activity").select("*", { count: "exact", head: true }),
+      sb.from("chat_talks").select("*", { count: "exact", head: true }),
     ]);
     const firstError =
-      inquiries.error ?? newInquiries.error ?? courses.error ?? activity.error;
+      inquiries.error ?? newInquiries.error ?? courses.error ?? activity.error ?? chats.error;
     if (firstError) fail(firstError, "Could not load the dashboard counts");
+
+    const libraryCountRes = await sb
+      .from("inquiries")
+      .select("*", { count: "exact", head: true })
+      .or("preferred_course.ilike.%library%,preferred_course.ilike.%seat%,message.ilike.%shift%");
+
     return {
       inquiries: inquiries.count ?? 0,
       newInquiries: newInquiries.count ?? 0,
       courses: courses.count ?? 0,
       activity: activity.count ?? 0,
+      chats: chats.count ?? 0,
+      libraryInquiries: libraryCountRes.count ?? 0,
     };
   }
 
-  const [courses, inquiries, activity] = await Promise.all([
+  const [courses, inquiries, activity, chats] = await Promise.all([
     loadCourses(),
     getInquiries(),
     getActivity(ACTIVITY_CAP),
+    getChatTalks(),
   ]);
+  const libraryInquiries = inquiries.filter(
+    (q) =>
+      q.preferredCourse?.toLowerCase().includes("library") ||
+      q.preferredCourse?.toLowerCase().includes("seat") ||
+      q.preferredCourse?.toLowerCase().includes("reading") ||
+      q.message?.toLowerCase().includes("shift") ||
+      q.message?.toLowerCase().includes("library")
+  );
   return {
     inquiries: inquiries.length,
     newInquiries: inquiries.filter((q) => q.status === "new").length,
     courses: courses.filter((c) => c.isActive !== false).length,
     activity: activity.length,
+    chats: chats.length,
+    libraryInquiries: libraryInquiries.length,
   };
 }
 

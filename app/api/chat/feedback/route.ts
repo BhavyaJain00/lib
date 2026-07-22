@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { updateChatTalkScore } from "@/lib/db";
 
 export async function POST(req: Request) {
@@ -14,6 +15,8 @@ export async function POST(req: Request) {
     }
 
     const updated = await updateChatTalkScore(messageId, score === 1 ? 1 : -1);
+    revalidatePath("/admin/chats");
+    revalidatePath("/admin");
 
     return NextResponse.json({ success: true, talk: updated });
   } catch (error) {

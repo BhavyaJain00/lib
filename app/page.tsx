@@ -16,8 +16,8 @@ import { BackToTop } from "@/components/back-to-top";
 import { OrganizationJsonLd, FaqJsonLd } from "@/components/json-ld";
 import { getPublicCourses } from "@/lib/db";
 
-// Re-generate every 5 minutes so admin edits go live without a redeploy.
-export const revalidate = 300;
+// Force dynamic rendering so admin course toggles take effect immediately.
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },

@@ -1,5 +1,176 @@
 [
   {
+    "_id": "a81943e0-d42b-4b05-8eff-be66935f5dfd",
+    "userQuestion": "🧪 Free 1-Day Trial",
+    "botReply": "🎓 You can reserve a seat or book a **Free 1-Day Trial Visit** at Navya Library!\n\nFill the simple online reservation form at `/library#reserve` or call/WhatsApp us directly at **+91 89492 24095**.",
+    "score": 1,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:20:52.064Z"
+  },
+  {
+    "_id": "0b42cbbb-5d0a-4e4a-8a54-e70527a9ced6",
+    "userQuestion": "💰 Monthly Fees",
+    "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",
+    "score": null,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:18:48.348Z"
+  },
+  {
+    "_id": "a590a696-36c9-4a64-bcaf-dca6c513df90",
+    "userQuestion": "💰 Monthly Fees",
+    "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",
+    "score": null,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:18:47.571Z"
+  },
+  {
+    "_id": "13d30f7d-e953-4a63-adb1-1ae6744fb039",
+    "userQuestion": "💰 Monthly Fees",
+    "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",
+    "score": null,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:18:47.282Z"
+  },
+  {
+    "_id": "3d5aefad-6f39-4064-a6b9-a72824f3e4a6",
+    "userQuestion": "💰 Monthly Fees",
+    "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",
+    "score": null,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:18:47.016Z"
+  },
+  {
+    "_id": "e9e2d55b-c49d-4f27-b8a9-a8ca88bdca44",
+    "userQuestion": "💰 Monthly Fees",
+    "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",
+    "score": null,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:18:46.668Z"
+  },
+  {
+    "_id": "f1d8a28e-cba7-4b32-b492-e71be33b0b20",
+    "userQuestion": "💰 Monthly Fees",
+    "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",
+    "score": null,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:18:46.449Z"
+  },
+  {
+    "_id": "3d77c129-692c-4876-affd-b1cf582dd470",
+    "userQuestion": "💰 Monthly Fees",
+    "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",
+    "score": null,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:18:46.106Z"
+  },
+  {
+    "_id": "478ac49c-0d51-4013-865b-aced99ff18b6",
+    "userQuestion": "💰 Monthly Fees",
+    "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",
+    "score": null,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:18:45.903Z"
+  },
+  {
+    "_id": "dca90608-d98c-4e9e-b1de-73b5bc4e32c6",
+    "userQuestion": "💰 Monthly Fees",
+    "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",
+    "score": null,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:18:45.692Z"
+  },
+  {
+    "_id": "e1cb5708-4acf-4b56-af5a-dd5a0030fdd0",
+    "userQuestion": "💰 Monthly Fees",
+    "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",
+    "score": null,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:18:45.354Z"
+  },
+  {
+    "_id": "946c161d-5ba3-4564-985e-bb144398bc6a",
+    "userQuestion": "💰 Monthly Fees",
+    "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",
+    "score": null,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:18:45.171Z"
+  },
+  {
+    "_id": "8ef5ecb8-011d-442c-a811-5d02bb786d59",
+    "userQuestion": "💰 Monthly Fees",
+    "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",
+    "score": null,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:18:44.928Z"
+  },
+  {
+    "_id": "da773737-8b18-4b48-a123-5b68ac2d7d90",
+    "userQuestion": "💰 Monthly Fees",
+    "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",
+    "score": null,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:18:44.629Z"
+  },
+  {
+    "_id": "4912cc0a-0526-427c-94bb-3c308f7bfff9",
+    "userQuestion": "💰 Monthly Fees",
+    "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",
+    "score": null,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:18:44.280Z"
+  },
+  {
+    "_id": "59ec07ec-8001-4c4b-b289-4eae647d1687",
+    "userQuestion": "💰 Monthly Fees",
+    "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",
+    "score": null,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:18:44.061Z"
+  },
+  {
+    "_id": "e88e375a-d6ac-47de-9ab7-19c676a5be73",
+    "userQuestion": "💰 Monthly Fees",
+    "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",
+    "score": null,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:18:43.889Z"
+  },
+  {
+    "_id": "fb04b6c7-2a31-48d0-938a-36176877da79",
+    "userQuestion": "💰 Monthly Fees",
+    "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",
+    "score": null,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:18:43.699Z"
+  },
+  {
+    "_id": "3c91d325-37b8-48d2-ab4a-1abf4aaf8f08",
+    "userQuestion": "💰 Monthly Fees",
+    "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",
+    "score": null,
+    "courseSlug": null,
+    "isAi": false,
+    "createdAt": "2026-07-22T07:18:43.325Z"
+  },
+  {
     "_id": "2de7defd-c1a6-4e53-bf79-fa27f5819b29",
     "userQuestion": "💰 Monthly Fees",
     "botReply": "**Navya Library Shift Membership Fees:**\n\n• **Morning Shift** (6 AM - 2 PM): **₹799 / month**\n• **Evening Shift** (2 PM - 10 PM): **₹799 / month**\n• **Full Day Shift** (6 AM - 10 PM): **₹1,399 / month** *(Most Popular)*\n• **24/7 Unlimited Access**: **₹1,799 / month** *(Includes Free Locker)*\n\nNo advance booking fee! You can also book a free 1-day trial visit.",

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getPublicCourses, recordChatTalk } from "@/lib/db";
 import {
   answer,
@@ -133,6 +134,8 @@ export async function POST(req: Request) {
         courseSlug: finalReply.courseSlug,
         isAi: isAiResponse,
       });
+      revalidatePath("/admin/chats");
+      revalidatePath("/admin");
     } catch (e) {
       console.error("Failed to record chat talk in db", e);
     }

@@ -30,9 +30,8 @@ import { getPublicCourse, getPublicCourses } from "@/lib/db";
 import { getIcon } from "@/lib/icons";
 import { SITE_NAME } from "@/lib/site";
 
-// Re-generate every 5 minutes so admin course edits go live without a
-// redeploy. Courses created later render on demand.
-export const revalidate = 300;
+// Force dynamic rendering so admin course edits & toggle states reflect immediately.
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return COURSES.map((course) => ({ slug: course.slug }));
