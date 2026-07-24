@@ -8,6 +8,7 @@ import {
   Clock,
   AlertCircle,
   Building2,
+  Image as ImageIcon,
 } from "lucide-react";
 import { getCounts, getInquiries, getActivity } from "@/lib/db";
 import {
@@ -33,15 +34,21 @@ export default async function AdminOverviewPage() {
     <div>
       <PageHeader
         title="Overview"
-        description="A live snapshot of queries, seat bookings, chatbot interactions, and course updates."
+        description="A live snapshot of queries, seat bookings, chatbot interactions, posters, and course updates."
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         <StatCard
           label="Total Queries"
           value={counts.inquiries}
           icon={Inbox}
           hint={`${counts.newInquiries} new / unhandled`}
+        />
+        <StatCard
+          label="Posters & Banners"
+          value={counts.posters}
+          icon={ImageIcon}
+          hint="Sliding posters"
         />
         <StatCard
           label="Library Requests"

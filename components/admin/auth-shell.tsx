@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { GraduationCap } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { useRouteTransition } from "@/components/route-transition-provider";
 
 export function AuthShell({
   title,
@@ -11,6 +14,8 @@ export function AuthShell({
   subtitle: string;
   children: React.ReactNode;
 }) {
+  const { transitionTo } = useRouteTransition();
+
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-12">
       <div className="pointer-events-none absolute inset-0 bg-grid opacity-40" />
@@ -19,14 +24,18 @@ export function AuthShell({
 
       <div className="relative w-full max-w-md">
         <div className="mb-6 flex flex-col items-center text-center">
-          <Link href="/" className="flex items-center gap-2.5">
+          <button
+            type="button"
+            onClick={() => transitionTo("/", "computech")}
+            className="flex cursor-pointer items-center gap-2.5"
+          >
             <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
               <GraduationCap className="h-6 w-6" />
             </span>
             <span className="text-lg font-bold tracking-tight">
               Navya <span className="text-primary">Computech</span>
             </span>
-          </Link>
+          </button>
         </div>
 
         <Card className="p-6 shadow-lg sm:p-8">
@@ -38,9 +47,13 @@ export function AuthShell({
         </Card>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          <Link href="/" className="hover:text-primary">
+          <button
+            type="button"
+            onClick={() => transitionTo("/", "computech")}
+            className="cursor-pointer text-muted-foreground transition-colors hover:text-primary"
+          >
             ← Back to website
-          </Link>
+          </button>
         </p>
       </div>
     </div>

@@ -19,10 +19,16 @@ import {
 
   deleteInquiryById,
   deleteChatTalkById,
+  createPoster,
+  updatePoster,
+  togglePosterActive,
+  reorderPosters,
+  deletePosterById,
   logActivity,
 
   type InquiryStatus,
   type CourseInput,
+  type PosterInput,
 } from "@/lib/db";
 import { saveUpload } from "@/lib/uploads";
 import { ICON_KEYS, type IconKey } from "@/lib/icons";
@@ -80,7 +86,7 @@ export async function signIn(
 
 export async function signOut() {
   await destroySession();
-  redirect("/admin/login");
+  redirect("/");
 }
 
 /* -------------------------------- Inquiries ------------------------------- */
@@ -247,6 +253,170 @@ export async function deleteChatTalk(id: string): Promise<ActionResult> {
       actor: actor ?? "admin",
     });
     revalidateAdmin("/admin/chats", "/admin/activity");
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: (e as Error).message };
+  }
+}
+
+/* --------------------------------- Posters --------------------------------- */
+
+export async function createPosterAction(
+  _prev: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const actor = await requireAdmin();
+
+  const title = String(formData.get("title") ?? "").trim();
+  const subtitle = String(formData.get("subtitle") ?? "").trim();
+  const linkUrl = String(formData.get("linkUrl") ?? "").trim();
+  const badge = String(formData.get("badge") ?? "").trim();
+  const imageUrlInput = String(formData.get("imageUrl") ?? "").trim();
+  const isActive = formData.get("isActive") === "true" || formData.get("isActive") === "on";
+  const file = formData.get("imageFile") as File | null;
+
+  if (!title) {
+    return { status: "error", message: "Poster title is required." };
+  }
+
+  let imageUrl = imageUrlInput;
+  if (file && file.size > 0 && file.name) {
+    try {
+      imageUrl = await saveUpload(file, "image");
+    } catch (e) {
+      return { status: "error", message: (e as Error).message };
+    }
+  }
+
+  if (!imageUrl) {
+    return { status: "error", message: "Poster image (file upload or URL) is required." };
+  }
+
+  try {
+    await createPoster({
+      title,
+      subtitle: subtitle || null,
+      imageUrl,
+      linkUrl: linkUrl || null,
+      badge: badge || null,
+      isActive,
+      sortOrder: 0,
+    });
+
+    await logActivity("poster_created", `Added poster: "${title}"`, {
+      actor: actor ?? "admin",
+    });
+
+    revalidateAdmin("/admin/posters", "/admin/activity");
+    revalidatePublic();
+    redirect("/admin/posters");
+  } catch (e) {
+    if ((e as Error).message === "NEXT_REDIRECT") throw e;
+    return { status: "error", message: (e as Error).message };
+  }
+}
+
+export async function updatePosterAction(
+  id: string,
+  _prev: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const actor = await requireAdmin();
+
+  const title = String(formData.get("title") ?? "").trim();
+  const subtitle = String(formData.get("subtitle") ?? "").trim();
+  const linkUrl = String(formData.get("linkUrl") ?? "").trim();
+  const badge = String(formData.get("badge") ?? "").trim();
+  let imageUrl = String(formData.get("imageUrl") ?? "").trim();
+  const isActive = formData.get("isActive") === "true" || formData.get("isActive") === "on";
+  const file = formData.get("imageFile") as File | null;
+
+  if (!title) {
+    return { status: "error", message: "Poster title is required." };
+  }
+
+  if (file && file.size > 0 && file.name) {
+    try {
+      imageUrl = await saveUpload(file, "image");
+    } catch (e) {
+      return { status: "error", message: (e as Error).message };
+    }
+  }
+
+  if (!imageUrl) {
+    return { status: "error", message: "Poster image is required." };
+  }
+
+  try {
+    await updatePoster(id, {
+      title,
+      subtitle: subtitle || null,
+      imageUrl,
+      linkUrl: linkUrl || null,
+      badge: badge || null,
+      isActive,
+    });
+
+    await logActivity("poster_updated", `Updated poster: "${title}"`, {
+      actor: actor ?? "admin",
+    });
+
+    revalidateAdmin("/admin/posters", "/admin/activity");
+    revalidatePublic();
+    redirect("/admin/posters");
+  } catch (e) {
+    if ((e as Error).message === "NEXT_REDIRECT") throw e;
+    return { status: "error", message: (e as Error).message };
+  }
+}
+
+export async function togglePosterActiveAction(
+  id: string,
+  isActive: boolean
+): Promise<ActionResult> {
+  const actor = await requireAdmin();
+
+  try {
+    await togglePosterActive(id, isActive);
+    await logActivity(
+      "poster_toggled",
+      `Poster ${isActive ? "shown" : "hidden"} on website`,
+      { actor: actor ?? "admin" }
+    );
+    revalidateAdmin("/admin/posters", "/admin/activity");
+    revalidatePublic();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: (e as Error).message };
+  }
+}
+
+export async function reorderPostersAction(orderedIds: string[]): Promise<ActionResult> {
+  const actor = await requireAdmin();
+
+  try {
+    await reorderPosters(orderedIds);
+    await logActivity("poster_reordered", "Reordered sliding posters", {
+      actor: actor ?? "admin",
+    });
+    revalidateAdmin("/admin/posters");
+    revalidatePublic();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: (e as Error).message };
+  }
+}
+
+export async function deletePosterAction(id: string): Promise<ActionResult> {
+  const actor = await requireAdmin();
+
+  try {
+    await deletePosterById(id);
+    await logActivity("poster_deleted", `Poster deleted`, {
+      actor: actor ?? "admin",
+    });
+    revalidateAdmin("/admin/posters", "/admin/activity");
+    revalidatePublic();
     return { ok: true };
   } catch (e) {
     return { ok: false, error: (e as Error).message };

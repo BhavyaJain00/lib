@@ -1,8 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { BookOpen, Phone, Mail, MapPin, Clock, ArrowRight } from "lucide-react";
 import { CONTACT } from "@/lib/data";
+import { useRouteTransition } from "@/components/route-transition-provider";
 
 export function LibraryFooter() {
+  const { transitionTo } = useRouteTransition();
+
   return (
     <footer className="border-t border-border bg-card text-card-foreground">
       <div className="container-page py-12 lg:py-16">
@@ -64,13 +69,14 @@ export function LibraryFooter() {
             <p className="mt-4 text-xs text-muted-foreground leading-relaxed">
               Looking for professional computer training & government certifications?
             </p>
-            <Link
-              href="/"
-              className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-primary transition-colors hover:underline"
+            <button
+              type="button"
+              onClick={() => transitionTo("/", "computech")}
+              className="mt-3 inline-flex cursor-pointer items-center gap-1.5 text-xs font-semibold text-primary transition-colors hover:underline"
             >
               Navya Computech Institute
               <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
+            </button>
           </div>
 
           {/* Contact */}

@@ -9,6 +9,8 @@ import { RefreshIconButton } from "@/components/admin/refresh-button";
 import { CONTACT } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
+import { useRouteTransition } from "@/components/route-transition-provider";
+
 const LIBRARY_NAV = [
   { label: "Overview", href: "/library#overview" },
   { label: "Amenities", href: "/library#amenities" },
@@ -21,6 +23,7 @@ const LIBRARY_NAV = [
 export function LibraryHeader() {
   const [open, setOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
+  const { transitionTo } = useRouteTransition();
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -71,15 +74,14 @@ export function LibraryHeader() {
         {/* Action controls */}
         <div className="flex items-center gap-2">
           <Button
-            asChild
+            type="button"
             variant="ghost"
             size="sm"
-            className="hidden text-xs text-muted-foreground hover:text-foreground md:inline-flex"
+            onClick={() => transitionTo("/", "computech")}
+            className="hidden text-xs text-muted-foreground hover:text-foreground md:inline-flex cursor-pointer"
           >
-            <Link href="/">
-              <ArrowLeft className="h-3.5 w-3.5" />
-              Computech Institute
-            </Link>
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Computech Institute
           </Button>
 
           <ThemeToggle />
@@ -103,7 +105,7 @@ export function LibraryHeader() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="border-t border-border bg-background lg:hidden">
+        <div className="animate-slide-down border-t border-border bg-background lg:hidden">
           <nav className="container-page flex flex-col py-3">
             {LIBRARY_NAV.map((link) => (
               <Link
@@ -116,11 +118,18 @@ export function LibraryHeader() {
               </Link>
             ))}
             <div className="mt-3 flex flex-col gap-2 pt-2 border-t border-border">
-              <Button asChild variant="outline" size="sm" onClick={() => setOpen(false)}>
-                <Link href="/">
-                  <ArrowLeft className="h-4 w-4" />
-                  Navya Computech Institute
-                </Link>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setOpen(false);
+                  transitionTo("/", "computech");
+                }}
+                className="cursor-pointer"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Navya Computech Institute
               </Button>
               <Button asChild size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => setOpen(false)}>
                 <Link href="/library#reserve">Book Trial Seat</Link>

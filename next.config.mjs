@@ -5,12 +5,14 @@ const nextConfig = {
   // the live site serves the real courses (lib/db.ts reads it at runtime;
   // deployed filesystems are read-only, so the file can't be created there).
   outputFileTracingIncludes: {
-    "/*": ["./data/courses.json"],
-    "/**": ["./data/courses.json"],
+    "/*": ["./data/courses.json", "./data/posters.json"],
+    "/**": ["./data/courses.json", "./data/posters.json"],
   },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "*.supabase.co" },
+      { protocol: "https", hostname: "suxkenhqynqriduqvmgj.supabase.co" },
     ],
   },
   experimental: {

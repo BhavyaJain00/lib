@@ -9,6 +9,8 @@
     "level": "Beginner",
     "certification": "RKCL / VMOU Certificate",
     "featured": true,
+    "isActive": true,
+    "sortOrder": 0,
     "syllabus": [
       "Computer Fundamentals & Windows",
       "Internet, Email & Digital Payments",
@@ -21,11 +23,7 @@
       "Data Entry Operator",
       "Office Assistant"
     ],
-    "_id": "f927265c-eec6-44ae-a383-afb258fe32eb",
-    "isActive": true,
-    "sortOrder": 0,
-    "createdAt": "2026-07-18T16:15:09.522Z",
-    "updatedAt": "2026-07-21T12:42:03.655Z"
+    "_id": "f927265c-eec6-44ae-a383-afb258fe32eb"
   },
   {
     "slug": "basic-computer",
@@ -36,6 +34,9 @@
     "batchSize": "Max 15 Students",
     "level": "Beginner",
     "certification": "ISO 9001:2015 Certificate",
+    "featured": false,
+    "isActive": true,
+    "sortOrder": 1,
     "syllabus": [
       "Computer Fundamentals & OS Basics",
       "MS Word, Excel & PowerPoint",
@@ -48,12 +49,7 @@
       "Office Assistant",
       "Front Office Executive"
     ],
-    "_id": "570dfc9a-a994-4fa7-b0ba-927cca503ed2",
-    "featured": false,
-    "isActive": true,
-    "sortOrder": 1,
-    "createdAt": "2026-07-18T16:15:09.522Z",
-    "updatedAt": "2026-07-21T12:42:11.647Z"
+    "_id": "570dfc9a-a994-4fa7-b0ba-927cca503ed2"
   },
   {
     "slug": "advance-computer",
@@ -64,6 +60,9 @@
     "batchSize": "Max 15 Students",
     "level": "Intermediate",
     "certification": "ISO 9001:2015 Certificate",
+    "featured": false,
+    "isActive": true,
+    "sortOrder": 2,
     "syllabus": [
       "Advanced Excel — Formulas & Pivot Tables",
       "Data Analysis & Dashboards",
@@ -76,12 +75,7 @@
       "MIS Executive",
       "Back Office Analyst"
     ],
-    "_id": "89d39f1d-4e94-4ac5-a0e0-26659cab5178",
-    "featured": false,
-    "isActive": true,
-    "sortOrder": 2,
-    "createdAt": "2026-07-18T16:15:09.522Z",
-    "updatedAt": "2026-07-21T12:42:18.409Z"
+    "_id": "89d39f1d-4e94-4ac5-a0e0-26659cab5178"
   },
   {
     "slug": "tally-gst",
@@ -93,6 +87,8 @@
     "level": "Beginner",
     "certification": "ISO 9001:2015 Certificate",
     "featured": true,
+    "isActive": true,
+    "sortOrder": 3,
     "syllabus": [
       "Accounting Fundamentals",
       "Tally Prime Complete",
@@ -105,11 +101,7 @@
       "Accounts Executive",
       "GST Practitioner"
     ],
-    "_id": "596e7f10-e5ca-4e8a-a0af-d79a8686eab4",
-    "isActive": true,
-    "sortOrder": 3,
-    "createdAt": "2026-07-18T16:15:09.522Z",
-    "updatedAt": "2026-07-21T12:42:19.196Z"
+    "_id": "596e7f10-e5ca-4e8a-a0af-d79a8686eab4"
   },
   {
     "slug": "web-development",
@@ -121,6 +113,8 @@
     "level": "Beginner to Advanced",
     "certification": "Industry-Recognized Certificate",
     "featured": true,
+    "isActive": true,
+    "sortOrder": 4,
     "syllabus": [
       "HTML5, CSS3 & Responsive Design",
       "JavaScript & Modern ES6+",
@@ -133,11 +127,7 @@
       "Full-Stack Developer",
       "Web Designer"
     ],
-    "_id": "5642dc03-2bb3-4d8e-98a6-1ebc8b228bd2",
-    "isActive": true,
-    "sortOrder": 4,
-    "createdAt": "2026-07-18T16:15:09.522Z",
-    "updatedAt": "2026-07-21T12:42:18.880Z"
+    "_id": "5642dc03-2bb3-4d8e-98a6-1ebc8b228bd2"
   },
   {
     "slug": "govt-exam-preparation",
@@ -149,6 +139,8 @@
     "level": "All Levels",
     "certification": "Institute Certificate",
     "featured": true,
+    "isActive": true,
+    "sortOrder": 5,
     "syllabus": [
       "Computer Awareness for Competitive Exams",
       "Typing Speed & Accuracy Practice",
@@ -161,11 +153,7 @@
       "SSC & Railway Posts",
       "State Govt Departments"
     ],
-    "_id": "7fea0360-a39f-4bda-bf28-6c686c6a1187",
-    "isActive": false,
-    "sortOrder": 5,
-    "createdAt": "2026-07-18T16:15:09.522Z",
-    "updatedAt": "2026-07-21T12:22:22.062Z"
+    "_id": "7fea0360-a39f-4bda-bf28-6c686c6a1187"
   },
   {
     "slug": "digital-marketing",
@@ -176,6 +164,9 @@
     "batchSize": "Max 15 Students",
     "level": "Intermediate",
     "certification": "Industry-Recognized Certificate",
+    "featured": false,
+    "isActive": true,
+    "sortOrder": 6,
     "syllabus": [
       "SEO & Keyword Research",
       "Google Ads & Meta Ads",
@@ -188,12 +179,7 @@
       "SEO Specialist",
       "Social Media Manager"
     ],
-    "_id": "bc218b86-e17b-4a0b-bf66-afec2aa00f50",
-    "featured": false,
-    "isActive": false,
-    "sortOrder": 6,
-    "createdAt": "2026-07-18T16:15:09.522Z",
-    "updatedAt": "2026-07-21T12:22:24.085Z"
+    "_id": "bc218b86-e17b-4a0b-bf66-afec2aa00f50"
   },
   {
     "slug": "ai-prompt-engineering",
@@ -204,6 +190,9 @@
     "batchSize": "Max 12 Students",
     "level": "All Levels",
     "certification": "Industry-Recognized Certificate",
+    "featured": false,
+    "isActive": true,
+    "sortOrder": 7,
     "syllabus": [
       "Foundations of AI & LLMs",
       "Prompt Engineering Techniques",
@@ -216,57 +205,110 @@
       "Prompt Engineer",
       "Automation Associate"
     ],
-    "_id": "4230a6d6-57e6-4f79-b638-0a25da596220",
-    "featured": false,
-    "isActive": false,
-    "sortOrder": 7,
-    "createdAt": "2026-07-18T16:15:09.522Z",
-    "updatedAt": "2026-07-21T12:22:25.122Z"
+    "_id": "4230a6d6-57e6-4f79-b638-0a25da596220"
   },
   {
-    "slug": "test",
-    "title": "test",
-    "icon": "BookOpen",
-    "tagline": "test",
-    "duration": "7",
-    "batchSize": "12",
-    "level": "12",
-    "certification": "test",
+    "slug": "graphic-designing",
+    "title": "Graphic Designing",
+    "icon": "PenTool",
+    "tagline": "Master Photoshop, Illustrator and CorelDRAW to design high-converting visual graphics.",
+    "duration": "3 Months",
+    "batchSize": "Max 12 Students",
+    "level": "Beginner",
+    "certification": "ISO 9001:2015 Certificate",
+    "featured": false,
+    "isActive": true,
+    "sortOrder": 8,
     "syllabus": [
-      "qw"
+      "Photoshop Foundations & Photo Editing",
+      "Vector Graphics in Adobe Illustrator",
+      "CorelDRAW Layouts & Flex Printing",
+      "Branding, Logos & Social Media Creatives",
+      "Portfolio Project & Print Export"
     ],
     "careers": [
-      "qw"
+      "Graphic Designer",
+      "UI/UX Assistant",
+      "Creative Visualizer"
     ],
-    "featured": false,
-    "isActive": false,
-    "sortOrder": 12,
-    "_id": "d585d1a1-1c39-425f-b44b-ddfc7f2d8c81",
-    "createdAt": "2026-07-18T16:17:27.701Z",
-    "updatedAt": "2026-07-21T12:22:26.193Z"
+    "_id": "a1111111-2222-3333-4444-555555555555"
   },
   {
-    "slug": "oiuytre",
-    "title": "poiuytrewq",
-    "icon": "Calculator",
-    "tagline": "poiuytrewq",
-    "duration": "6 Months",
+    "slug": "python-data-science",
+    "title": "Python Data Science",
+    "icon": "Database",
+    "tagline": "Learn Python from basics to data analysis, Pandas, NumPy and Machine Learning models.",
+    "duration": "4 Months",
     "batchSize": "Max 15 Students",
     "level": "Intermediate",
     "certification": "ISO 9001:2015 Certificate",
-    "syllabus": [
-      "qwertyuio"
-    ],
-    "careers": [
-      "qwertyuio"
-    ],
     "featured": false,
     "isActive": true,
-    "sortOrder": -2,
-    "image": null,
-    "document": null,
-    "_id": "dd0052bb-929d-4750-84ef-365b8febbf63",
-    "createdAt": "2026-07-19T06:53:00.650Z",
-    "updatedAt": "2026-07-21T12:41:56.378Z"
+    "sortOrder": 9,
+    "syllabus": [
+      "Python Fundamentals & OOPs Concepts",
+      "Data Manipulation with Pandas & NumPy",
+      "Data Visualization with Matplotlib",
+      "SQL Database Integration",
+      "Mini Data Analytics Project"
+    ],
+    "careers": [
+      "Python Developer",
+      "Data Analyst Trainee",
+      "Software Associate"
+    ],
+    "_id": "b2222222-3333-4444-5555-666666666666"
+  },
+  {
+    "slug": "hardware-networking",
+    "title": "Hardware & Networking",
+    "icon": "Cpu",
+    "tagline": "Hands-on PC assembly, OS installation, network cabling, and IT troubleshooting.",
+    "duration": "3 Months",
+    "batchSize": "Max 12 Students",
+    "level": "Beginner",
+    "certification": "ISO 9001:2015 Certificate",
+    "featured": false,
+    "isActive": true,
+    "sortOrder": 10,
+    "syllabus": [
+      "PC Hardware Assembly & Diagnostics",
+      "Windows & Linux OS Installation",
+      "LAN/WAN Networking & Router Configuration",
+      "Printer, Scanner & Peripheral Setup",
+      "Hardware Troubleshooting & Maintenance"
+    ],
+    "careers": [
+      "Hardware Engineer",
+      "Desktop Support Technician",
+      "Network Assistant"
+    ],
+    "_id": "c3333333-4444-5555-6666-777777777777"
+  },
+  {
+    "slug": "cyber-security",
+    "title": "Cyber Security Essentials",
+    "icon": "Globe",
+    "tagline": "Understand ethical hacking, network defense, firewalls, and digital security awareness.",
+    "duration": "4 Months",
+    "batchSize": "Max 10 Students",
+    "level": "Intermediate",
+    "certification": "ISO 9001:2015 Certificate",
+    "featured": false,
+    "isActive": true,
+    "sortOrder": 11,
+    "syllabus": [
+      "Cyber Security & Networking Fundamentals",
+      "Ethical Hacking & Vulnerability Scan",
+      "Web Application & Password Security",
+      "Wi-Fi Defense & Malware Protection",
+      "Cyber Crime Laws & Forensic Basics"
+    ],
+    "careers": [
+      "Cyber Security Analyst",
+      "IT Support Specialist",
+      "System Security Associate"
+    ],
+    "_id": "d4444444-5555-6666-7777-888888888888"
   }
 ]

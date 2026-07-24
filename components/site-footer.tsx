@@ -3,6 +3,8 @@ import { GraduationCap, Phone, Mail, MapPin, MessageCircle } from "lucide-react"
 import { Button } from "@/components/ui/button";
 import { NAV_LINKS, CONTACT } from "@/lib/data";
 import { getPublicCourses } from "@/lib/db";
+import { FooterLibraryLink } from "@/components/footer-library-link";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 // Add your real profile URLs here — icons with an empty href are hidden
 // automatically, so no dead links ever ship.
@@ -89,14 +91,17 @@ export async function SiteFooter() {
                   </Link>
                 </li>
               ))}
+              <li className="pt-1">
+                <FooterLibraryLink />
+              </li>
             </ul>
           </div>
 
           {/* Courses */}
           <div>
-            <h4 className="text-sm font-semibold">Our Courses</h4>
+            <h4 className="text-sm font-semibold">Popular Courses</h4>
             <ul className="mt-4 space-y-2.5">
-              {courses.map((c) => (
+              {courses.slice(0, 5).map((c) => (
                 <li key={c.slug}>
                   <Link
                     href={`/courses/${c.slug}`}
@@ -106,6 +111,14 @@ export async function SiteFooter() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link
+                  href="/#courses"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-primary transition-colors hover:underline"
+                >
+                  View All Courses &rarr;
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -153,13 +166,14 @@ export async function SiteFooter() {
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} Navya Computech. All rights reserved.
           </p>
-          <div className="flex items-center gap-5 text-sm text-muted-foreground">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
             <Link href="/privacy" className="hover:text-primary">
               Privacy Policy
             </Link>
             <Link href="/terms" className="hover:text-primary">
               Terms &amp; Conditions
             </Link>
+            <ThemeToggle variant="segmented" />
           </div>
         </div>
       </div>

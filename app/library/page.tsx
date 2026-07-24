@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import {
   BookOpen,
@@ -18,6 +19,7 @@ import {
   ArrowRight,
   Armchair,
   VolumeX,
+  Camera,
 } from "lucide-react";
 import { LibraryHeader } from "@/components/library/library-header";
 import { LibraryFooter } from "@/components/library/library-footer";
@@ -25,7 +27,6 @@ import { AmenitiesSection } from "@/components/library/amenities-section";
 import { PlansSection } from "@/components/library/plans-section";
 import { SeatVisualizer } from "@/components/library/seat-visualizer";
 import { SeatReservationForm } from "@/components/library/seat-reservation-form";
-import { TestimonialsSection } from "@/components/library/testimonials-section";
 import { LibraryFAQ } from "@/components/library/library-faq";
 import { Chatbot } from "@/components/chatbot/chatbot";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
@@ -133,8 +134,8 @@ export default function LibraryPage() {
 
             {/* Right Visual Card */}
             <div className="lg:col-span-5">
-              <Card className="relative overflow-hidden border border-emerald-500/30 bg-card p-6 sm:p-8 shadow-2xl rounded-3xl backdrop-blur-md">
-                <div className="flex items-center justify-between border-b border-border/60 pb-4">
+              <Card className="relative overflow-hidden border border-emerald-500/30 bg-card p-4 sm:p-6 shadow-2xl rounded-3xl backdrop-blur-md">
+                <div className="flex items-center justify-between border-b border-border/60 pb-3 mb-4">
                   <div className="flex items-center gap-2">
                     <span className="flex h-3 w-3 rounded-full bg-emerald-500 animate-ping" />
                     <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
@@ -146,45 +147,50 @@ export default function LibraryPage() {
                   </Badge>
                 </div>
 
-                <div className="mt-6 space-y-4">
-                  <div className="rounded-2xl bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-transparent p-4 border border-emerald-500/20">
-                    <h3 className="font-bold text-foreground flex items-center gap-2 text-sm sm:text-base">
-                      <Armchair className="h-5 w-5 text-emerald-500" />
+                <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-emerald-500/20 mb-4 shadow-md group">
+                  <Image
+                    src="/images/library/reading-hall.png"
+                    alt="Navya Library Quiet AC Reading Hall"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                  <div className="absolute bottom-3 left-3 right-3 text-white">
+                    <p className="text-xs font-bold flex items-center gap-1.5">
+                      <Sparkles className="h-3.5 w-3.5 text-amber-400" />
+                      AC Silent Reading Hall
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="rounded-xl bg-emerald-500/10 p-3 border border-emerald-500/20">
+                    <h3 className="font-bold text-foreground flex items-center gap-2 text-xs sm:text-sm">
+                      <Armchair className="h-4 w-4 text-emerald-500" />
                       Dedicated Reserved Study Booths
                     </h3>
-                    <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
+                    <p className="mt-1 text-[11px] text-muted-foreground leading-relaxed">
                       Acoustically soundproof side partitions, warm LED lamp, power dock, and high-back lumbar support chair.
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2.5 text-xs">
-                    <div className="flex items-center gap-2 rounded-xl border border-border/80 bg-secondary/20 p-3 font-medium">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                  <div className="grid grid-cols-2 gap-2 text-[11px]">
+                    <div className="flex items-center gap-1.5 rounded-lg border border-border/80 bg-secondary/20 p-2 font-medium">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
                       <span>7-Stage RO Water</span>
                     </div>
-                    <div className="flex items-center gap-2 rounded-xl border border-border/80 bg-secondary/20 p-3 font-medium">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                    <div className="flex items-center gap-1.5 rounded-lg border border-border/80 bg-secondary/20 p-2 font-medium">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
                       <span>Keycard Access</span>
                     </div>
-                    <div className="flex items-center gap-2 rounded-xl border border-border/80 bg-secondary/20 p-3 font-medium">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                    <div className="flex items-center gap-1.5 rounded-lg border border-border/80 bg-secondary/20 p-2 font-medium">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
                       <span>Daily News & Mag</span>
                     </div>
-                    <div className="flex items-center gap-2 rounded-xl border border-border/80 bg-secondary/20 p-3 font-medium">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                    <div className="flex items-center gap-1.5 rounded-lg border border-border/80 bg-secondary/20 p-2 font-medium">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
                       <span>24/7 CCTV Camera</span>
                     </div>
-                  </div>
-
-                  <div className="rounded-2xl border border-border bg-card p-4 text-center space-y-1 shadow-sm">
-                    <p className="text-xs text-muted-foreground">Reserve your seat instantly over call:</p>
-                    <a
-                      href={CONTACT.phoneHref}
-                      className="text-sm font-extrabold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center justify-center gap-1.5"
-                    >
-                      <Phone className="h-4 w-4" />
-                      {CONTACT.phone}
-                    </a>
                   </div>
                 </div>
               </Card>
@@ -198,6 +204,89 @@ export default function LibraryPage() {
         {/* Section 3: Amenities & Facilities */}
         <AmenitiesSection />
 
+        {/* Section 3b: Reading Hall Photo Gallery */}
+        <section className="py-16 border-t border-border/50 bg-background">
+          <div className="container-page">
+            <div className="text-center max-w-2xl mx-auto mb-10">
+              <Badge variant="soft" className="gap-1.5 border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                <Camera className="h-3.5 w-3.5" />
+                Campus Photo Gallery
+              </Badge>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+                Explore Navya Library Facilities
+              </h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Take a tour of our quiet AC reading halls, personal cubicles, and refreshment lounge.
+              </p>
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-3">
+              <Card className="group overflow-hidden rounded-2xl border border-emerald-500/30 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <Image
+                    src="/images/library/reading-hall.png"
+                    alt="Silent AC Reading Hall"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
+                  <div className="absolute bottom-3 left-3 text-white text-xs font-bold">
+                    Silent AC Reading Zone
+                  </div>
+                </div>
+                <div className="p-4">
+                  <h3 className="font-bold text-sm text-foreground">Silent AC Reading Hall</h3>
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                    Air-conditioned, dust-free environment with high-back comfortable seating.
+                  </p>
+                </div>
+              </Card>
+
+              <Card className="group overflow-hidden rounded-2xl border border-emerald-500/30 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <Image
+                    src="/images/library/study-cubicle.png"
+                    alt="Personal Study Booth with Power Socket"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
+                  <div className="absolute bottom-3 left-3 text-white text-xs font-bold">
+                    Personal Desk Booth
+                  </div>
+                </div>
+                <div className="p-4">
+                  <h3 className="font-bold text-sm text-foreground">Personal Study Booths</h3>
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                    Warm LED lamp, individual power outlet, and soundproof side partitions.
+                  </p>
+                </div>
+              </Card>
+
+              <Card className="group overflow-hidden rounded-2xl border border-emerald-500/30 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <Image
+                    src="/images/library/lounge-zone.png"
+                    alt="RO Water & Break Lounge"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
+                  <div className="absolute bottom-3 left-3 text-white text-xs font-bold">
+                    RO Water Lounge
+                  </div>
+                </div>
+                <div className="p-4">
+                  <h3 className="font-bold text-sm text-foreground">Refreshment & Water Zone</h3>
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                    7-Stage RO purified water dispenser and clean break lounge.
+                  </p>
+                </div>
+              </Card>
+            </div>
+          </div>
+        </section>
+
         {/* Section 4: Membership Plans & Shift Fees */}
         <PlansSection />
 
@@ -207,9 +296,6 @@ export default function LibraryPage() {
             <SeatReservationForm />
           </div>
         </section>
-
-        {/* Section 6: Student Testimonials */}
-        <TestimonialsSection />
 
         {/* Section 7: FAQs */}
         <LibraryFAQ />

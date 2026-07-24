@@ -62,6 +62,20 @@ create table if not exists activity (
   created_at timestamptz not null default now()
 );
 
+-- Promotional poster/announcement banners shown on home page sliding section.
+create table if not exists posters (
+  id          uuid primary key default gen_random_uuid(),
+  title       text not null,
+  subtitle    text,
+  image_url   text not null,
+  link_url    text,
+  badge       text,
+  is_active   boolean not null default true,
+  sort_order  integer not null default 0,
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now()
+);
+
 -- ------------------------- Row Level Security --------------------------------
 -- The server uses the SECRET key, which bypasses RLS entirely — these policies
 -- only limit what the public publishable/anon key could do from a browser.
@@ -69,6 +83,13 @@ create table if not exists activity (
 alter table courses   enable row level security;
 alter table inquiries enable row level security;
 alter table activity  enable row level security;
+alter table posters   enable row level security;
+
+-- Anyone may read active posters.
+drop policy if exists "public read active posters" on posters;
+create policy "public read active posters"
+  on posters for select
+  using (is_active = true);
 
 -- Anyone may read the active courses (safe for the public site).
 drop policy if exists "public read active courses" on courses;

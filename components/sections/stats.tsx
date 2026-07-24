@@ -14,9 +14,9 @@ export function Stats() {
           {STATS.map((stat, i) => {
             const Icon = ICONS[i];
             return (
-              <div key={stat.label} className="flex flex-col items-center text-center">
-                <Icon className="mb-3 h-6 w-6 opacity-90 sm:h-7 sm:w-7" />
-                <span className="text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl">
+              <div key={stat.label} className="group flex flex-col items-center text-center transition-transform duration-300 hover:scale-105">
+                <Icon className="mb-3 h-6 w-6 opacity-90 transition-transform duration-300 group-hover:scale-125 group-hover:opacity-100 sm:h-7 sm:w-7" />
+                <span className="text-2xl font-extrabold tracking-tight transition-colors duration-200 sm:text-3xl lg:text-4xl">
                   {stat.value}
                 </span>
                 <span className="mt-1 text-sm font-medium text-primary-foreground/80">

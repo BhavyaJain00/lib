@@ -1,0 +1,38 @@
+[
+  {
+    "_id": "p2-tally-gst-masterclass",
+    "title": "Tally Prime & GST Professional Training",
+    "subtitle": "Master real-world accounting, e-way bills, GST returns & payroll with expert CA trainers.",
+    "imageUrl": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=1200&auto=format&fit=crop",
+    "linkUrl": "/courses/tally-gst",
+    "badge": "Special Workshop",
+    "isActive": true,
+    "sortOrder": 1,
+    "createdAt": "2026-07-24T10:00:00.000Z",
+    "updatedAt": "2026-07-24T10:00:00.000Z"
+  },
+  {
+    "_id": "p3-fullstack-web-dev",
+    "title": "Full-Stack Web Development Bootcamp",
+    "subtitle": "Build live projects with React, Next.js, & Node. 100% Practical training with job placement assistance.",
+    "imageUrl": "https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=1200&auto=format&fit=crop",
+    "linkUrl": "/courses/web-development",
+    "badge": "100% Placement",
+    "isActive": true,
+    "sortOrder": 2,
+    "createdAt": "2026-07-24T10:00:00.000Z",
+    "updatedAt": "2026-07-24T10:00:00.000Z"
+  },
+  {
+    "_id": "p5-free-demo-class",
+    "title": "Free 2-Day Trial Demo Classes Open Now!",
+    "subtitle": "Visit Navya Computech campus or join online. Experience our smart AC lab & expert guidance before enrolling.",
+    "imageUrl": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=1200&auto=format&fit=crop",
+    "linkUrl": "#contact",
+    "badge": "Free Demo",
+    "isActive": true,
+    "sortOrder": 4,
+    "createdAt": "2026-07-24T10:00:00.000Z",
+    "updatedAt": "2026-07-24T10:00:00.000Z"
+  }
+]

@@ -48,6 +48,21 @@ export type ChatTalkDoc = {
   createdAt: string;
 };
 
+export type PosterDoc = {
+  _id: string;
+  title: string;
+  subtitle?: string | null;
+  imageUrl: string;
+  linkUrl?: string | null;
+  badge?: string | null;
+  isActive: boolean;
+  sortOrder: number;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export type PosterInput = Omit<PosterDoc, "_id" | "createdAt" | "updatedAt">;
+
 /* -------------------------------- Supabase --------------------------------- */
 
 
@@ -126,6 +141,34 @@ function courseToRow(input: CourseInput) {
   };
 }
 
+type PosterRow = {
+  id: string;
+  title: string;
+  subtitle: string | null;
+  image_url: string;
+  link_url: string | null;
+  badge: string | null;
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+function rowToPoster(row: PosterRow): PosterDoc {
+  return {
+    _id: row.id,
+    title: row.title,
+    subtitle: row.subtitle,
+    imageUrl: row.image_url,
+    linkUrl: row.link_url,
+    badge: row.badge,
+    isActive: row.is_active,
+    sortOrder: row.sort_order,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
 type SbError = { code?: string; message: string } | null;
 
 /** Postgres error codes worth translating for the admin UI. */
@@ -172,6 +215,7 @@ const FILES = {
   inquiries: path.join(DATA_DIR, "inquiries.json"),
   activity: path.join(DATA_DIR, "activity.json"),
   chats: path.join(DATA_DIR, "chats.json"),
+  posters: path.join(DATA_DIR, "posters.json"),
 } as const;
 
 
@@ -266,9 +310,12 @@ async function loadCourses(): Promise<CourseDoc[]> {
     });
   }
 
+  const safeList = list ?? [];
+
   // Merge any new courses defined in lib/data.ts that aren't in the saved list yet
-  const existingSlugs = new Set(list.map((c) => c.slug));
+  const existingSlugs = new Set(safeList.map((c) => c.slug));
   const newCourses = COURSES.filter((c) => !existingSlugs.has(c.slug));
+  let resultList = safeList;
   if (newCourses.length > 0) {
     const now = new Date().toISOString();
     const additions: CourseDoc[] = newCourses.map((c, i) => ({
@@ -276,15 +323,15 @@ async function loadCourses(): Promise<CourseDoc[]> {
       _id: randomUUID(),
       featured: c.featured ?? false,
       isActive: true,
-      sortOrder: list.length + i,
+      sortOrder: safeList.length + i,
       createdAt: now,
       updatedAt: now,
     }));
-    list = [...list, ...additions];
-    await writeList(FILES.courses, list);
+    resultList = [...safeList, ...additions];
+    await writeList(FILES.courses, resultList);
   }
 
-  return list;
+  return resultList;
 }
 
 /**
@@ -323,7 +370,43 @@ export async function getPublicCourses(): Promise<Course[]> {
       .order("sort_order", { ascending: true })
       .order("title", { ascending: true });
     if (error) fail(error, "Could not load courses");
-    return (data as CourseRow[]).map(rowToCourse);
+
+    const existingRows = (data as CourseRow[]) || [];
+    const existingSlugs = new Set(existingRows.map((r) => r.slug));
+    const missingCourses = COURSES.filter((c) => !existingSlugs.has(c.slug));
+
+    if (missingCourses.length > 0) {
+      const now = new Date().toISOString();
+      const newRows = missingCourses.map((c, i) => ({
+        slug: c.slug,
+        title: c.title,
+        icon: c.icon,
+        tagline: c.tagline,
+        duration: c.duration,
+        batch_size: c.batchSize,
+        level: c.level,
+        certification: c.certification,
+        syllabus: c.syllabus,
+        careers: c.careers,
+        featured: c.featured ?? false,
+        is_active: true,
+        sort_order: existingRows.length + i,
+        created_at: now,
+        updated_at: now,
+      }));
+
+      const { data: inserted, error: insertErr } = await sb
+        .from("courses")
+        .insert(newRows)
+        .select("*");
+
+      if (!insertErr && inserted) {
+        const allRows = [...existingRows, ...(inserted as CourseRow[])];
+        return allRows.map(rowToCourse);
+      }
+    }
+
+    return existingRows.map(rowToCourse);
   }
 
   const list = await loadCourses();
@@ -677,7 +760,7 @@ export async function getActivity(limit = 200): Promise<ActivityDoc[]> {
 export async function getCounts() {
   const sb = getSupabase();
   if (sb) {
-    const [inquiries, newInquiries, courses, activity, chats] = await Promise.all([
+    const [inquiries, newInquiries, courses, activity, chats, posters] = await Promise.all([
       sb.from("inquiries").select("*", { count: "exact", head: true }),
       sb
         .from("inquiries")
@@ -689,9 +772,10 @@ export async function getCounts() {
         .eq("is_active", true),
       sb.from("activity").select("*", { count: "exact", head: true }),
       sb.from("chat_talks").select("*", { count: "exact", head: true }),
+      sb.from("posters").select("*", { count: "exact", head: true }),
     ]);
     const firstError =
-      inquiries.error ?? newInquiries.error ?? courses.error ?? activity.error ?? chats.error;
+      inquiries.error ?? newInquiries.error ?? courses.error ?? activity.error ?? chats.error ?? posters.error;
     if (firstError) fail(firstError, "Could not load the dashboard counts");
 
     const libraryCountRes = await sb
@@ -706,14 +790,16 @@ export async function getCounts() {
       activity: activity.count ?? 0,
       chats: chats.count ?? 0,
       libraryInquiries: libraryCountRes.count ?? 0,
+      posters: posters.count ?? 0,
     };
   }
 
-  const [courses, inquiries, activity, chats] = await Promise.all([
+  const [courses, inquiries, activity, chats, posters] = await Promise.all([
     loadCourses(),
     getInquiries(),
     getActivity(ACTIVITY_CAP),
     getChatTalks(),
+    readList<PosterDoc>(FILES.posters),
   ]);
   const libraryInquiries = inquiries.filter(
     (q) =>
@@ -730,6 +816,7 @@ export async function getCounts() {
     activity: activity.length,
     chats: chats.length,
     libraryInquiries: libraryInquiries.length,
+    posters: (posters ?? []).length,
   };
 }
 
@@ -851,6 +938,265 @@ export async function deleteChatTalkById(id: string) {
   const list = (await readList<ChatTalkDoc>(FILES.chats)) ?? [];
   const nextList = list.filter((item) => item._id !== id);
   await writeList(FILES.chats, nextList);
+}
+
+/* --------------------------------- Posters --------------------------------- */
+
+function isTableMissing(error: any): boolean {
+  if (!error) return false;
+  return (
+    error.code === PGRST_MISSING_TABLE ||
+    error.code === PG_UNDEFINED_TABLE ||
+    error.message?.includes("in the schema cache") ||
+    error.message?.includes("does not exist")
+  );
+}
+
+export async function getPublicPosters(): Promise<PosterDoc[]> {
+  const sb = getSupabase();
+  if (sb) {
+    const { data, error } = await sb
+      .from("posters")
+      .select("*")
+      .eq("is_active", true)
+      .order("sort_order", { ascending: true });
+
+    if (error) {
+      if (isTableMissing(error)) {
+        const list = (await readList<PosterDoc>(FILES.posters)) ?? [];
+        return list
+          .filter((p) => p.isActive)
+          .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+      }
+      fail(error, "Could not fetch public posters");
+    }
+    return (data ?? []).map(rowToPoster);
+  }
+
+  const list = (await readList<PosterDoc>(FILES.posters)) ?? [];
+  return list
+    .filter((p) => p.isActive)
+    .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+}
+
+export async function getAllPosters(): Promise<PosterDoc[]> {
+  const sb = getSupabase();
+  if (sb) {
+    const { data, error } = await sb
+      .from("posters")
+      .select("*")
+      .order("sort_order", { ascending: true });
+
+    if (error) {
+      if (isTableMissing(error)) {
+        const list = (await readList<PosterDoc>(FILES.posters)) ?? [];
+        return [...list].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+      }
+      fail(error, "Could not fetch posters");
+    }
+    return (data ?? []).map(rowToPoster);
+  }
+
+  const list = (await readList<PosterDoc>(FILES.posters)) ?? [];
+  return [...list].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+}
+
+export async function createPoster(input: PosterInput): Promise<PosterDoc> {
+  const now = new Date().toISOString();
+  const id = randomUUID();
+
+  const sb = getSupabase();
+  if (sb) {
+    const { data, error } = await sb
+      .from("posters")
+      .insert({
+        id,
+        title: input.title,
+        subtitle: input.subtitle ?? null,
+        image_url: input.imageUrl,
+        link_url: input.linkUrl ?? null,
+        badge: input.badge ?? null,
+        is_active: input.isActive,
+        sort_order: input.sortOrder ?? 0,
+        created_at: now,
+        updated_at: now,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      if (isTableMissing(error)) {
+        const doc: PosterDoc = {
+          _id: id,
+          title: input.title,
+          subtitle: input.subtitle ?? null,
+          imageUrl: input.imageUrl,
+          linkUrl: input.linkUrl ?? null,
+          badge: input.badge ?? null,
+          isActive: input.isActive,
+          sortOrder: input.sortOrder ?? 0,
+          createdAt: now,
+          updatedAt: now,
+        };
+        const list = (await readList<PosterDoc>(FILES.posters)) ?? [];
+        await writeList(FILES.posters, [...list, doc]);
+        return doc;
+      }
+      fail(error, "Could not create poster");
+    }
+    return rowToPoster(data);
+  }
+
+  const doc: PosterDoc = {
+    _id: id,
+    title: input.title,
+    subtitle: input.subtitle ?? null,
+    imageUrl: input.imageUrl,
+    linkUrl: input.linkUrl ?? null,
+    badge: input.badge ?? null,
+    isActive: input.isActive,
+    sortOrder: input.sortOrder ?? 0,
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  const list = (await readList<PosterDoc>(FILES.posters)) ?? [];
+  await writeList(FILES.posters, [...list, doc]);
+  return doc;
+}
+
+export async function updatePoster(
+  id: string,
+  input: Partial<PosterInput>
+): Promise<PosterDoc | null> {
+  const now = new Date().toISOString();
+  const sb = getSupabase();
+  if (sb) {
+    const payload: Record<string, unknown> = { updated_at: now };
+    if (input.title !== undefined) payload.title = input.title;
+    if (input.subtitle !== undefined) payload.subtitle = input.subtitle;
+    if (input.imageUrl !== undefined) payload.image_url = input.imageUrl;
+    if (input.linkUrl !== undefined) payload.link_url = input.linkUrl;
+    if (input.badge !== undefined) payload.badge = input.badge;
+    if (input.isActive !== undefined) payload.is_active = input.isActive;
+    if (input.sortOrder !== undefined) payload.sort_order = input.sortOrder;
+
+    const { data, error } = await sb
+      .from("posters")
+      .update(payload)
+      .eq("id", id)
+      .select()
+      .maybeSingle();
+
+    if (error) {
+      if (isTableMissing(error)) {
+        const list = (await readList<PosterDoc>(FILES.posters)) ?? [];
+        let updated: PosterDoc | null = null;
+        const nextList = list.map((item) => {
+          if (item._id === id) {
+            updated = { ...item, ...input, updatedAt: now };
+            return updated;
+          }
+          return item;
+        });
+        if (updated) await writeList(FILES.posters, nextList);
+        return updated;
+      }
+      fail(error, "Could not update poster");
+    }
+    return data ? rowToPoster(data) : null;
+  }
+
+  const list = (await readList<PosterDoc>(FILES.posters)) ?? [];
+  let updated: PosterDoc | null = null;
+  const nextList = list.map((item) => {
+    if (item._id === id) {
+      updated = {
+        ...item,
+        ...input,
+        updatedAt: now,
+      };
+      return updated;
+    }
+    return item;
+  });
+
+  if (updated) {
+    await writeList(FILES.posters, nextList);
+  }
+  return updated;
+}
+
+export async function togglePosterActive(
+  id: string,
+  isActive: boolean
+): Promise<PosterDoc | null> {
+  return updatePoster(id, { isActive });
+}
+
+export async function reorderPosters(orderedIds: string[]): Promise<void> {
+  const sb = getSupabase();
+  if (sb) {
+    for (let index = 0; index < orderedIds.length; index++) {
+      const { error } = await sb
+        .from("posters")
+        .update({ sort_order: index })
+        .eq("id", orderedIds[index]);
+
+      if (error && isTableMissing(error)) {
+        const list = (await readList<PosterDoc>(FILES.posters)) ?? [];
+        const map = new Map(list.map((p) => [p._id, p]));
+        const nextList: PosterDoc[] = [];
+
+        orderedIds.forEach((idStr, idx) => {
+          const item = map.get(idStr);
+          if (item) {
+            nextList.push({ ...item, sortOrder: idx });
+            map.delete(idStr);
+          }
+        });
+
+        map.forEach((item) => nextList.push(item));
+        await writeList(FILES.posters, nextList);
+        return;
+      }
+    }
+    return;
+  }
+
+  const list = (await readList<PosterDoc>(FILES.posters)) ?? [];
+  const map = new Map(list.map((p) => [p._id, p]));
+  const nextList: PosterDoc[] = [];
+
+  orderedIds.forEach((id, index) => {
+    const item = map.get(id);
+    if (item) {
+      nextList.push({ ...item, sortOrder: index });
+      map.delete(id);
+    }
+  });
+
+  map.forEach((item) => nextList.push(item));
+  await writeList(FILES.posters, nextList);
+}
+
+export async function deletePosterById(id: string): Promise<void> {
+  const sb = getSupabase();
+  if (sb) {
+    const { error } = await sb.from("posters").delete().eq("id", id);
+    if (error && (error.code === PG_INVALID_UUID || isTableMissing(error))) {
+      const list = (await readList<PosterDoc>(FILES.posters)) ?? [];
+      const nextList = list.filter((item) => item._id !== id);
+      await writeList(FILES.posters, nextList);
+      return;
+    }
+    if (error) fail(error, "Could not delete poster");
+    return;
+  }
+
+  const list = (await readList<PosterDoc>(FILES.posters)) ?? [];
+  const nextList = list.filter((item) => item._id !== id);
+  await writeList(FILES.posters, nextList);
 }
 
 

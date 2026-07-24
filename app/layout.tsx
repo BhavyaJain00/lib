@@ -72,6 +72,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { RouteTransitionProvider } from "@/components/route-transition-provider";
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -84,7 +86,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <RouteTransitionProvider>
+            {children}
+          </RouteTransitionProvider>
         </ThemeProvider>
       </body>
     </html>

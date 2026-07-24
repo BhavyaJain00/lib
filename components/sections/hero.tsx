@@ -39,49 +39,46 @@ export async function Hero() {
       <div className="container-page relative grid gap-10 py-12 sm:gap-12 sm:py-16 lg:grid-cols-2 lg:items-center lg:py-24">
         {/* Copy */}
         <div className="animate-fade-up">
-          <Badge variant="soft" className="mb-5 gap-1.5">
-            <Star className="h-3.5 w-3.5 fill-current" />
-            ISO 9001:2015 Certified · Since 2018
+          <Badge variant="soft" className="mb-5 gap-1.5 animate-float shadow-xs">
+            <Star className="h-3.5 w-3.5 fill-current text-amber-500" />
+            ISO 9001:2015 Certified &middot; Since 2018
           </Badge>
 
           <h1 className="text-balance text-3xl font-extrabold leading-[1.15] tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
-            Master the <span className="text-gradient">Tech Skills</span> of
-            Tomorrow
+            Master the <span className="text-gradient">Tech Skills</span> of Tomorrow
           </h1>
 
           <p className="mt-4 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:mt-5 sm:text-lg">
-            From RSCIT and Tally to Web Development and government exam
-            preparation — learn with hands-on labs, expert corporate trainers
-            and dedicated placement support.
+            From RSCIT and Tally to Web Development and government exam preparation &mdash; learn with hands-on labs, expert corporate trainers and dedicated placement support.
           </p>
 
           <div className="value-props-grid mt-7 flex flex-wrap gap-3">
             {VALUE_PROPS.map(({ icon: Icon, label }) => (
               <div
                 key={label}
-                className="value-props-item inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-medium shadow-sm"
+                className="value-props-item inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-medium shadow-xs transition-all duration-300 hover:scale-105 hover:border-primary/40 hover:shadow-md"
               >
-                <Icon className="h-4 w-4 text-primary shrink-0" />
+                <Icon className="h-4 w-4 text-primary shrink-0 transition-transform duration-300 hover:rotate-12" />
                 <span>{label}</span>
               </div>
             ))}
           </div>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button asChild size="lg">
+            <Button asChild size="lg" className="group shadow-lg shadow-primary/20">
               <Link href="/#courses">
                 Explore Courses
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline">
-              <Link href="/#admissions">Book a Free Demo</Link>
+            <Button asChild size="lg" variant="outline" className="transition-all duration-200 hover:border-primary/40">
+              <Link href="/#admissions">Book a Free Demo Class</Link>
             </Button>
           </div>
 
           <p className="mt-6 flex items-center gap-2 text-sm text-muted-foreground">
-            <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-            Trusted by 1000+ students · 100% placement support
+            <CheckCircle2 className="h-4 w-4 text-emerald-500 animate-pulse" />
+            Trusted by 1000+ students &middot; 100% placement support
           </p>
         </div>
 
