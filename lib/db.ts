@@ -253,18 +253,38 @@ function seedCourses(): CourseDoc[] {
   }));
 }
 
-/** The course list, seeding the starter catalogue on very first run. */
+/** The course list, seeding the starter catalogue on very first run and syncing new data.ts entries. */
 async function loadCourses(): Promise<CourseDoc[]> {
-  const list = await readList<CourseDoc>(FILES.courses);
-  if (list) return list;
-  return withLock(async () => {
-    // Re-check inside the lock — another request may have seeded meanwhile.
-    const again = await readList<CourseDoc>(FILES.courses);
-    if (again) return again;
-    const seeded = seedCourses();
-    await writeList(FILES.courses, seeded);
-    return seeded;
-  });
+  let list = await readList<CourseDoc>(FILES.courses);
+  if (!list) {
+    list = await withLock(async () => {
+      const again = await readList<CourseDoc>(FILES.courses);
+      if (again) return again;
+      const seeded = seedCourses();
+      await writeList(FILES.courses, seeded);
+      return seeded;
+    });
+  }
+
+  // Merge any new courses defined in lib/data.ts that aren't in the saved list yet
+  const existingSlugs = new Set(list.map((c) => c.slug));
+  const newCourses = COURSES.filter((c) => !existingSlugs.has(c.slug));
+  if (newCourses.length > 0) {
+    const now = new Date().toISOString();
+    const additions: CourseDoc[] = newCourses.map((c, i) => ({
+      ...c,
+      _id: randomUUID(),
+      featured: c.featured ?? false,
+      isActive: true,
+      sortOrder: list.length + i,
+      createdAt: now,
+      updatedAt: now,
+    }));
+    list = [...list, ...additions];
+    await writeList(FILES.courses, list);
+  }
+
+  return list;
 }
 
 /**
