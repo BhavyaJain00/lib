@@ -103,6 +103,9 @@ export function RouteTransitionProvider({
         // Phase 3: Route push mid-way
         .call(() => {
           router.push(href);
+          if (typeof window !== "undefined") {
+            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+          }
         })
         // Hold for smooth feel
         .to({}, { duration: 0.25 })
@@ -124,10 +127,13 @@ export function RouteTransitionProvider({
     [isPending, router]
   );
 
-  // Reset overlay when pathname updates
+  // Reset overlay & scroll to top when pathname updates
   React.useEffect(() => {
     if (overlayRef.current) {
       gsap.set(overlayRef.current, { display: "none" });
+    }
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }
     setIsPending(false);
   }, [pathname]);

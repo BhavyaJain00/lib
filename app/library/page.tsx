@@ -152,6 +152,7 @@ export default function LibraryPage() {
                     src="/images/library/reading-hall.png"
                     alt="Navya Library Quiet AC Reading Hall"
                     fill
+                    sizes="(max-width: 1024px) 100vw, 42vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
@@ -227,6 +228,7 @@ export default function LibraryPage() {
                     src="/images/library/reading-hall.png"
                     alt="Silent AC Reading Hall"
                     fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
@@ -248,6 +250,7 @@ export default function LibraryPage() {
                     src="/images/library/study-cubicle.png"
                     alt="Personal Study Booth with Power Socket"
                     fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
@@ -269,6 +272,7 @@ export default function LibraryPage() {
                     src="/images/library/lounge-zone.png"
                     alt="RO Water & Break Lounge"
                     fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
@@ -277,7 +281,7 @@ export default function LibraryPage() {
                   </div>
                 </div>
                 <div className="p-4">
-                  <h3 className="font-bold text-sm text-foreground">Refreshment & Water Zone</h3>
+                  <h3 className="font-bold text-sm text-foreground">Refreshment &amp; Water Zone</h3>
                   <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
                     7-Stage RO purified water dispenser and clean break lounge.
                   </p>
