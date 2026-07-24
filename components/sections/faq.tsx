@@ -4,7 +4,7 @@ import { FAQS } from "@/lib/data";
 
 export function Faq() {
   return (
-    <section id="faq" className="border-t border-border py-12 sm:py-16 lg:py-24">
+    <section id="faq" className="section-compact-mobile border-t border-border py-12 sm:py-16 lg:py-24">
       <div className="container-page">
         <SectionHeading
           eyebrow="FAQ"
@@ -16,10 +16,10 @@ export function Faq() {
           {FAQS.map((faq) => (
             <details
               key={faq.q}
-              className="group h-fit rounded-lg border border-border bg-card shadow-sm open:border-primary/40"
+              className="faq-card group h-fit rounded-lg border border-border bg-card shadow-sm open:border-primary/40"
             >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-4 text-left font-medium [&::-webkit-details-marker]:hidden sm:p-5">
-                {faq.q}
+                <span>{faq.q}</span>
                 <ChevronDown className="h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-180 group-open:text-primary" />
               </summary>
               <p className="px-4 pb-4 text-sm leading-relaxed text-muted-foreground sm:px-5 sm:pb-5">

@@ -8,6 +8,8 @@ import { answer, answerLibrary, type BotLink, type BotReply } from "@/lib/chatbo
 import type { Course } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
+import { DraggableFab } from "@/components/ui/draggable-fab";
+
 type Message = {
   id: string;
   role: "user" | "bot";
@@ -339,28 +341,34 @@ export function ChatWidget({
 
   return (
     <>
-      {/* Floating launcher — bottom-left, above the back-to-top button. */}
-      <button
-        type="button"
-        aria-label="Open AI chat assistant"
-        onClick={() => setOpen(true)}
+      {/* Floating launcher — bottom-left, draggable on screen */}
+      <DraggableFab
         className={cn(
-          "chatbot-fab group fixed bottom-24 left-6 z-40 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-          isLibrary
-            ? "bg-emerald-600 text-white shadow-emerald-600/30"
-            : "bg-primary text-primary-foreground shadow-primary/30",
+          "chatbot-fab fixed bottom-20 left-6 z-40 transition-all",
           open && "pointer-events-none scale-90 opacity-0"
         )}
       >
-        <Bot className="h-7 w-7" />
-        <span className="absolute -right-0.5 -top-0.5 flex h-3.5 w-3.5">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-          <span className="relative inline-flex h-3.5 w-3.5 rounded-full border-2 border-background bg-emerald-500" />
-        </span>
-        <span className="fab-tip pointer-events-none absolute left-16 whitespace-nowrap rounded-md bg-foreground px-3 py-1.5 text-xs font-medium text-background opacity-0 shadow-md transition-opacity group-hover:opacity-100">
-          {isLibrary ? "Ask about Library Seats 📚" : "Ask AI Assistant"}
-        </span>
-      </button>
+        <button
+          type="button"
+          aria-label="Open AI chat assistant"
+          onClick={() => setOpen(true)}
+          className={cn(
+            "group relative flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full shadow-md transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+            isLibrary
+              ? "bg-emerald-600 text-white shadow-emerald-600/30"
+              : "bg-primary text-primary-foreground shadow-primary/30"
+          )}
+        >
+          <Bot className="h-5 w-5" />
+          <span className="absolute -right-0.5 -top-0.5 flex h-3 w-3">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex h-3 w-3 rounded-full border-2 border-background bg-emerald-500" />
+          </span>
+          <span className="fab-tip pointer-events-none absolute left-14 whitespace-nowrap rounded-md bg-foreground px-2.5 py-1 text-[11px] font-medium text-background opacity-0 shadow-md transition-opacity group-hover:opacity-100">
+            {isLibrary ? "Ask about Library Seats 📚" : "Ask AI Assistant 🤖"}
+          </span>
+        </button>
+      </DraggableFab>
 
       {/* Chat panel */}
       <div

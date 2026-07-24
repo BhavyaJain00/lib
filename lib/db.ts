@@ -131,11 +131,23 @@ type SbError = { code?: string; message: string } | null;
 /** Postgres error codes worth translating for the admin UI. */
 const PG_UNIQUE_VIOLATION = "23505";
 const PG_INVALID_UUID = "22P02";
+const PGRST_MISSING_TABLE = "PGRST301";
+const PG_UNDEFINED_TABLE = "42P01";
 
 /** Throws a friendly error for a Supabase failure (never returns). */
 function fail(error: NonNullable<SbError>, context: string): never {
   if (error.code === PG_UNIQUE_VIOLATION) {
     throw new Error("A course with that slug already exists.");
+  }
+  if (
+    error.code === PGRST_MISSING_TABLE ||
+    error.code === PG_UNDEFINED_TABLE ||
+    error.message?.includes("in the schema cache") ||
+    error.message?.includes("does not exist")
+  ) {
+    throw new Error(
+      `${context}: Supabase table missing. Please execute the SQL in 'supabase/schema.sql' in your Supabase project's SQL Editor (https://supabase.com/dashboard), or remove NEXT_PUBLIC_SUPABASE_URL from .env to use local demo mode. (Original error: ${error.message})`
+    );
   }
   throw new Error(`${context}: ${error.message}`);
 }

@@ -1,0 +1,171 @@
+/* ------------------------------------------------------------------ */
+/*  NAVYA COMPUTECH — DEDICATED MOBILE RESPONSIVE STYLESHEET          */
+/*  Folder: styles/mobile/responsive.css                              */
+/*  Contains ALL phone & tablet-only responsive overrides.            */
+/*  Only active on screens <= 1023px (tablets) and <= 639px (phones).  */
+/*  Desktop layout (>= 640px / >= 1024px) is 100% untouched.           */
+/* ------------------------------------------------------------------ */
+
+/* ---- Tablets & Phones (max-width: 1023.98px) ----------------------- */
+@media (max-width: 1023.98px) {
+  /* Hide desktop-only elements */
+  .hide-on-mobile {
+    display: none !important;
+  }
+
+  /* Prevent horizontal scroll leakage on mobile viewports */
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Mobile navigation menu container */
+  .mobile-nav {
+    max-height: calc(100vh - 4rem);
+    max-height: calc(100dvh - 4rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Touch horizontal scrolling helper for badges, cards & tables */
+  .scroll-x-touch {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .scroll-x-touch::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ---- Phones Only (max-width: 639.98px) ------------------------------ */
+@media (max-width: 639.98px) {
+  /* 1. Prevent iOS Safari auto-zoom when tapping text inputs */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* 2. Floating Action Buttons (FABs) mobile positioning */
+  .whatsapp-fab {
+    right: 0.875rem;
+    bottom: calc(0.875rem + env(safe-area-inset-bottom));
+    z-index: 45;
+  }
+
+  .admin-fab {
+    right: 0.875rem;
+    bottom: calc(4.25rem + env(safe-area-inset-bottom));
+    z-index: 44;
+  }
+
+  .back-to-top-fab {
+    left: 0.875rem;
+    bottom: calc(0.875rem + env(safe-area-inset-bottom));
+    z-index: 45;
+  }
+
+  .chatbot-fab {
+    left: 0.875rem;
+    bottom: calc(4.25rem + env(safe-area-inset-bottom));
+    z-index: 44;
+  }
+
+  .chatbot-panel {
+    left: 0.5rem;
+    right: 0.5rem;
+    width: auto;
+    max-height: calc(85dvh - env(safe-area-inset-bottom));
+    bottom: calc(0.5rem + env(safe-area-inset-bottom));
+  }
+
+  .fab-tip {
+    display: none !important;
+  }
+
+  /* 3. Compact Section Headings on Mobile */
+  .section-heading-title {
+    font-size: 1.25rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .section-heading-desc {
+    font-size: 0.75rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .section-heading-badge {
+    font-size: 0.625rem !important;
+    padding: 0.125rem 0.5rem !important;
+  }
+
+  /* 4. Compact Section Padding for Mobile */
+  .section-compact-mobile {
+    padding-top: 1.75rem !important;
+    padding-bottom: 1.75rem !important;
+  }
+
+  /* 5. Hero Value Props: 3-in-1 line on Mobile */
+  .value-props-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.375rem !important;
+    text-align: center !important;
+  }
+
+  .value-props-item {
+    font-size: 0.6875rem !important;
+    padding: 0.375rem 0.5rem !important;
+    justify-content: center !important;
+  }
+
+  /* 6. Why-Us Cards: 3-in-1 line on Mobile */
+  .why-us-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.5rem !important;
+  }
+
+  .why-us-card {
+    padding: 0.75rem 0.375rem !important;
+    text-align: center !important;
+    align-items: center !important;
+  }
+
+  .why-us-card h3 {
+    font-size: 0.75rem !important;
+    line-height: 1.2 !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .why-us-card p {
+    display: none !important;
+  }
+
+  /* 7. Compact FAQ Accordion on Mobile */
+  .faq-card summary {
+    padding: 0.75rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  .faq-card p {
+    padding: 0 0.75rem 0.75rem 0.75rem !important;
+    font-size: 0.6875rem !important;
+    line-height: 1.4 !important;
+  }
+
+  /* 8. Touch button min-height */
+  button,
+  .btn-touch {
+    min-height: 42px;
+  }
+}
+
+/* ---- Ultra-small phones (below 380px) -------------------------------- */
+@media (max-width: 379.98px) {
+  .container-page {
+    padding-inline: 0.75rem;
+  }
+}

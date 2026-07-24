@@ -55,14 +55,14 @@ export async function Hero() {
             and dedicated placement support.
           </p>
 
-          <div className="mt-7 flex flex-wrap gap-3">
+          <div className="value-props-grid mt-7 flex flex-wrap gap-3">
             {VALUE_PROPS.map(({ icon: Icon, label }) => (
               <div
                 key={label}
-                className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-medium shadow-sm"
+                className="value-props-item inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-medium shadow-sm"
               >
-                <Icon className="h-4 w-4 text-primary" />
-                {label}
+                <Icon className="h-4 w-4 text-primary shrink-0" />
+                <span>{label}</span>
               </div>
             ))}
           </div>

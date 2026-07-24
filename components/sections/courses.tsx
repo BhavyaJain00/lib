@@ -17,7 +17,7 @@ export async function Courses() {
   const courses = await getPublicCourses();
 
   return (
-    <section id="courses" className="py-12 sm:py-16 lg:py-24">
+    <section id="courses" className="section-compact-mobile py-12 sm:py-16 lg:py-24">
       <div className="container-page">
         <SectionHeading
           eyebrow="Our Courses"

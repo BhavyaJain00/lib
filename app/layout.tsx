@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import "./mobile.css";
+import "@/styles/mobile/responsive.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 

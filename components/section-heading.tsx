@@ -19,23 +19,23 @@ export function SectionHeading({
   return (
     <div
       className={cn(
-        "flex flex-col gap-3",
+        "flex flex-col gap-2 sm:gap-3",
         align === "center" ? "items-center text-center" : "items-start text-left",
         className,
       )}
     >
       {eyebrow && (
-        <Badge variant="soft" className="uppercase tracking-wide">
+        <Badge variant="soft" className="section-heading-badge uppercase tracking-wide">
           {eyebrow}
         </Badge>
       )}
-      <h2 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
+      <h2 className="section-heading-title text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
         {title}
       </h2>
       {description && (
         <p
           className={cn(
-            "max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg",
+            "section-heading-desc max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg",
             align === "center" && "mx-auto",
           )}
         >

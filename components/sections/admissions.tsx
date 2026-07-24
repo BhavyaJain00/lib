@@ -1,4 +1,4 @@
-import { Phone, Mail, MessageCircle, PhoneCall, CalendarClock, GraduationCap } from "lucide-react";
+import { Phone, Mail, MessageCircle, PhoneCall, CalendarClock, GraduationCap, Award } from "lucide-react";
 import { SectionHeading } from "@/components/section-heading";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -8,17 +8,22 @@ const STEPS = [
   {
     icon: PhoneCall,
     title: "1. Call or WhatsApp us",
-    text: "Tell us which course interests you. Our counselors will answer every question — fees, timings and career paths.",
+    text: "Tell us which course interests you. Our counselors answer every question.",
   },
   {
     icon: CalendarClock,
     title: "2. Attend a free demo class",
-    text: "Visit the institute, sit in a live class, see the labs — completely free, with no obligation to join.",
+    text: "Visit the institute, sit in a live class, see the labs — completely free.",
   },
   {
     icon: GraduationCap,
     title: "3. Join your batch",
-    text: "Pick a batch timing that suits you and start learning. Study materials and mentorship are included.",
+    text: "Pick a batch timing that suits you. Study materials included.",
+  },
+  {
+    icon: Award,
+    title: "4. Get certified & placed",
+    text: "Complete practical projects, earn certificate & get placement support.",
   },
 ];
 
@@ -32,14 +37,14 @@ export function Admissions() {
           description="Enrollment is simple and personal — no online payments on this website. Contact us directly and we'll guide you from your first call to your first class."
         />
 
-        <div className="mt-10 grid gap-6 sm:mt-12 md:grid-cols-3">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:mt-12 lg:grid-cols-4 sm:gap-6">
           {STEPS.map(({ icon: Icon, title, text }) => (
-            <Card key={title} className="p-6 text-center">
-              <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <Icon className="h-6 w-6" />
+            <Card key={title} className="p-3 text-center sm:p-6 flex flex-col items-center">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary sm:h-12 sm:w-12">
+                <Icon className="h-4.5 w-4.5 sm:h-6 sm:w-6" />
               </span>
-              <h3 className="mt-5 text-lg font-semibold">{title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{text}</p>
+              <h3 className="mt-3 text-xs font-bold leading-tight sm:text-base sm:font-semibold">{title}</h3>
+              <p className="mt-1.5 text-[11px] leading-relaxed text-muted-foreground sm:text-sm">{text}</p>
             </Card>
           ))}
         </div>

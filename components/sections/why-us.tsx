@@ -15,11 +15,11 @@ export function WhyUs() {
           description="We don't just teach tools — we prepare you for the workplace with mentorship, live projects and certifications that employers trust."
         />
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="why-us-grid mt-12 grid gap-6 md:grid-cols-3">
           {WHY_US.map((item, i) => {
             const Icon = ICONS[i];
             return (
-              <Card key={item.title} className="p-6">
+              <Card key={item.title} className="why-us-card p-6">
                 <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
                   <Icon className="h-6 w-6" />
                 </span>

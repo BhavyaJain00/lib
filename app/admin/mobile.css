@@ -2,17 +2,27 @@
 /*  Admin panel — mobile responsiveness                                */
 /*  Companion to app/mobile.css (which handles the public site): the   */
 /*  central home for the admin panel's phone/tablet-only overrides.    */
-/*  Add admin mobile rules HERE instead of scattering them across      */
-/*  components, then apply the helper classes in JSX. Loaded by        */
-/*  app/admin/(panel)/layout.tsx, so it ships only with admin pages.   */
-/*                                                                     */
-/*  Rules live outside any @layer, so they win over Tailwind utility   */
-/*  classes without needing !important.                                */
 /* ------------------------------------------------------------------ */
 
-/* ---- Phones: below Tailwind's `sm` breakpoint (640px), where the ---- */
-/* ---- course form's field grids collapse to a single column.       ---- */
+@media (max-width: 1023.98px) {
+  /* Tables in admin panel get smooth horizontal scrolling on mobile */
+  .admin-table-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius);
+  }
+}
+
+/* ---- Phones: below Tailwind's `sm` breakpoint (640px) ------------- */
 @media (max-width: 639.98px) {
+  /* Prevent iOS input auto-zoom in admin forms */
+  .course-form input,
+  .course-form select,
+  .course-form textarea {
+    font-size: 16px !important;
+  }
+
   /* Helper — add to any admin element that should not exist on phones. */
   .admin-phone-hidden {
     display: none;
@@ -27,21 +37,22 @@
   .course-form .form-actions {
     flex-direction: column;
     align-items: stretch;
+    gap: 0.75rem;
   }
   .course-form .form-actions > * {
     width: 100%;
+    min-height: 44px;
   }
 
-  /* Dropdown options get taller rows on phones — comfier touch targets.
-     (The list is portaled to <body>, so it isn't under .course-form.) */
+  /* Dropdown options get taller rows on phones — comfier touch targets. */
   ul[role="listbox"] li button {
     padding-top: 0.625rem;
     padding-bottom: 0.625rem;
+    min-height: 44px;
   }
 }
 
-/* ---- Very narrow phones: drop the syllabus row numbers so the ---- */
-/* ---- text inputs keep a usable width next to their buttons.    ---- */
+/* ---- Very narrow phones: drop the syllabus row numbers ------------- */
 @media (max-width: 379.98px) {
   .list-editor .row-num {
     display: none;
