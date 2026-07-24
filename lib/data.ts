@@ -185,6 +185,82 @@ export const COURSES: Course[] = [
     ],
     careers: ["AI Content Specialist", "Prompt Engineer", "Automation Associate"],
   },
+  {
+    slug: "graphic-designing",
+    title: "Graphic Designing",
+    icon: "PenTool",
+    tagline:
+      "Master Photoshop, Illustrator and CorelDRAW to design high-converting visual graphics.",
+    duration: "3 Months",
+    batchSize: "Max 12 Students",
+    level: "Beginner",
+    certification: "ISO 9001:2015 Certificate",
+    syllabus: [
+      "Photoshop Foundations & Photo Editing",
+      "Vector Graphics in Adobe Illustrator",
+      "CorelDRAW Layouts & Flex Printing",
+      "Branding, Logos & Social Media Creatives",
+      "Portfolio Project & Print Export",
+    ],
+    careers: ["Graphic Designer", "UI/UX Assistant", "Creative Visualizer"],
+  },
+  {
+    slug: "python-data-science",
+    title: "Python Data Science",
+    icon: "Database",
+    tagline:
+      "Learn Python from basics to data analysis, Pandas, NumPy and Machine Learning models.",
+    duration: "4 Months",
+    batchSize: "Max 15 Students",
+    level: "Intermediate",
+    certification: "ISO 9001:2015 Certificate",
+    syllabus: [
+      "Python Fundamentals & OOPs Concepts",
+      "Data Manipulation with Pandas & NumPy",
+      "Data Visualization with Matplotlib",
+      "SQL Database Integration",
+      "Mini Data Analytics Project",
+    ],
+    careers: ["Python Developer", "Data Analyst Trainee", "Software Associate"],
+  },
+  {
+    slug: "hardware-networking",
+    title: "Hardware & Networking",
+    icon: "Cpu",
+    tagline:
+      "Hands-on PC assembly, OS installation, network cabling, and IT troubleshooting.",
+    duration: "3 Months",
+    batchSize: "Max 12 Students",
+    level: "Beginner",
+    certification: "ISO 9001:2015 Certificate",
+    syllabus: [
+      "PC Hardware Assembly & Diagnostics",
+      "Windows & Linux OS Installation",
+      "LAN/WAN Networking & Router Configuration",
+      "Printer, Scanner & Peripheral Setup",
+      "Hardware Troubleshooting & Maintenance",
+    ],
+    careers: ["Hardware Engineer", "Desktop Support Technician", "Network Assistant"],
+  },
+  {
+    slug: "cyber-security",
+    title: "Cyber Security Essentials",
+    icon: "Globe",
+    tagline:
+      "Understand ethical hacking, network defense, firewalls, and digital security awareness.",
+    duration: "4 Months",
+    batchSize: "Max 10 Students",
+    level: "Intermediate",
+    certification: "ISO 9001:2015 Certificate",
+    syllabus: [
+      "Cyber Security & Networking Fundamentals",
+      "Ethical Hacking & Vulnerability Scan",
+      "Web Application & Password Security",
+      "Wi-Fi Defense & Malware Protection",
+      "Cyber Crime Laws & Forensic Basics",
+    ],
+    careers: ["Cyber Security Analyst", "IT Support Specialist", "System Security Associate"],
+  },
 ];
 
 export function getCourse(slug: string): Course | undefined {
