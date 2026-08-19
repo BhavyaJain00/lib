@@ -176,11 +176,25 @@ const PG_UNIQUE_VIOLATION = "23505";
 const PG_INVALID_UUID = "22P02";
 const PGRST_MISSING_TABLE = "PGRST301";
 const PG_UNDEFINED_TABLE = "42P01";
+const PGRST_MISSING_COLUMN = "PGRST204";
 
 /** Throws a friendly error for a Supabase failure (never returns). */
 function fail(error: NonNullable<SbError>, context: string): never {
   if (error.code === PG_UNIQUE_VIOLATION) {
     throw new Error("A course with that slug already exists.");
+  }
+  // A missing COLUMN has to be caught before the missing-TABLE branch below,
+  // because PostgREST phrases both as "... in the schema cache" — and the two
+  // need opposite advice. schema.sql cannot repair a column: its `create table
+  // if not exists` skips any table that already exists, so pointing someone at
+  // it here sends them to a no-op.
+  if (
+    error.code === PGRST_MISSING_COLUMN ||
+    /Could not find the '.+' column/.test(error.message ?? "")
+  ) {
+    throw new Error(
+      `${context}: a Supabase table is missing a column. Re-running 'supabase/schema.sql' will NOT fix this — it skips tables that already exist. Apply the matching file from 'supabase/migrations/' in your project's SQL Editor (https://supabase.com/dashboard). (Original error: ${error.message})`
+    );
   }
   if (
     error.code === PGRST_MISSING_TABLE ||
@@ -361,52 +375,64 @@ function courseSort(a: CourseDoc, b: CourseDoc): number {
 
 /** Courses shown on the public site (active only). */
 export async function getPublicCourses(): Promise<Course[]> {
-  const sb = getSupabase();
-  if (sb) {
-    const { data, error } = await sb
-      .from("courses")
-      .select("*")
-      .eq("is_active", true)
-      .order("sort_order", { ascending: true })
-      .order("title", { ascending: true });
-    if (error) fail(error, "Could not load courses");
-
-    const existingRows = (data as CourseRow[]) || [];
-    const existingSlugs = new Set(existingRows.map((r) => r.slug));
-    const missingCourses = COURSES.filter((c) => !existingSlugs.has(c.slug));
-
-    if (missingCourses.length > 0) {
-      const now = new Date().toISOString();
-      const newRows = missingCourses.map((c, i) => ({
-        slug: c.slug,
-        title: c.title,
-        icon: c.icon,
-        tagline: c.tagline,
-        duration: c.duration,
-        batch_size: c.batchSize,
-        level: c.level,
-        certification: c.certification,
-        syllabus: c.syllabus,
-        careers: c.careers,
-        featured: c.featured ?? false,
-        is_active: true,
-        sort_order: existingRows.length + i,
-        created_at: now,
-        updated_at: now,
-      }));
-
-      const { data: inserted, error: insertErr } = await sb
+  try {
+    const sb = getSupabase();
+    if (sb) {
+      const { data, error } = await sb
         .from("courses")
-        .insert(newRows)
-        .select("*");
+        .select("*")
+        .eq("is_active", true)
+        .order("sort_order", { ascending: true })
+        .order("title", { ascending: true });
 
-      if (!insertErr && inserted) {
-        const allRows = [...existingRows, ...(inserted as CourseRow[])];
-        return allRows.map(rowToCourse);
+      if (!error && data) {
+        const existingRows = (data as CourseRow[]) || [];
+        const existingSlugs = new Set(existingRows.map((r) => r.slug));
+        const missingCourses = COURSES.filter((c) => !existingSlugs.has(c.slug));
+
+        if (missingCourses.length > 0) {
+          const now = new Date().toISOString();
+          const newRows = missingCourses.map((c, i) => ({
+            slug: c.slug,
+            title: c.title,
+            icon: c.icon,
+            tagline: c.tagline,
+            duration: c.duration,
+            batch_size: c.batchSize,
+            level: c.level,
+            certification: c.certification,
+            syllabus: c.syllabus,
+            careers: c.careers,
+            featured: c.featured ?? false,
+            is_active: true,
+            sort_order: existingRows.length + i,
+            created_at: now,
+            updated_at: now,
+          }));
+
+          try {
+            const { data: inserted, error: insertErr } = await sb
+              .from("courses")
+              .insert(newRows)
+              .select("*");
+
+            if (!insertErr && inserted) {
+              const allRows = [...existingRows, ...(inserted as CourseRow[])];
+              return allRows.map(rowToCourse);
+            }
+          } catch {
+            // Ignore auto-seed errors
+          }
+        }
+
+        return existingRows.map(rowToCourse);
+      }
+      if (error) {
+        console.warn("[Supabase] getPublicCourses error, using local fallback:", error.message);
       }
     }
-
-    return existingRows.map(rowToCourse);
+  } catch (err: any) {
+    console.warn("[Supabase] getPublicCourses exception, using local fallback:", err?.message || err);
   }
 
   const list = await loadCourses();
@@ -414,16 +440,25 @@ export async function getPublicCourses(): Promise<Course[]> {
 }
 
 export async function getPublicCourse(slug: string): Promise<Course | undefined> {
-  const sb = getSupabase();
-  if (sb) {
-    const { data, error } = await sb
-      .from("courses")
-      .select("*")
-      .eq("slug", slug)
-      .eq("is_active", true)
-      .maybeSingle();
-    if (error) fail(error, "Could not load the course");
-    return data ? rowToCourse(data as CourseRow) : undefined;
+  try {
+    const sb = getSupabase();
+    if (sb) {
+      const { data, error } = await sb
+        .from("courses")
+        .select("*")
+        .eq("slug", slug)
+        .eq("is_active", true)
+        .maybeSingle();
+
+      if (!error && data) {
+        return rowToCourse(data as CourseRow);
+      }
+      if (error) {
+        console.warn("[Supabase] getPublicCourse error, using local fallback:", error.message);
+      }
+    }
+  } catch (err: any) {
+    console.warn("[Supabase] getPublicCourse exception, using local fallback:", err?.message || err);
   }
 
   const list = await loadCourses();
@@ -760,28 +795,32 @@ export async function getActivity(limit = 200): Promise<ActivityDoc[]> {
 export async function getCounts() {
   const sb = getSupabase();
   if (sb) {
-    const [inquiries, newInquiries, courses, activity, chats, posters] = await Promise.all([
-      sb.from("inquiries").select("*", { count: "exact", head: true }),
-      sb
-        .from("inquiries")
-        .select("*", { count: "exact", head: true })
-        .eq("status", "new"),
-      sb
-        .from("courses")
-        .select("*", { count: "exact", head: true })
-        .eq("is_active", true),
-      sb.from("activity").select("*", { count: "exact", head: true }),
-      sb.from("chat_talks").select("*", { count: "exact", head: true }),
-      sb.from("posters").select("*", { count: "exact", head: true }),
-    ]);
+    // All seven counts are independent, so they go out together — the library
+    // tally used to be awaited after the others and added a whole extra
+    // round trip to every admin page load (the layout is force-dynamic, so
+    // this runs on each navigation into the panel).
+    const [inquiries, newInquiries, courses, activity, chats, posters, libraryCountRes] =
+      await Promise.all([
+        sb.from("inquiries").select("*", { count: "exact", head: true }),
+        sb
+          .from("inquiries")
+          .select("*", { count: "exact", head: true })
+          .eq("status", "new"),
+        sb
+          .from("courses")
+          .select("*", { count: "exact", head: true })
+          .eq("is_active", true),
+        sb.from("activity").select("*", { count: "exact", head: true }),
+        sb.from("chat_talks").select("*", { count: "exact", head: true }),
+        sb.from("posters").select("*", { count: "exact", head: true }),
+        sb
+          .from("inquiries")
+          .select("*", { count: "exact", head: true })
+          .or("preferred_course.ilike.%library%,preferred_course.ilike.%seat%,message.ilike.%shift%"),
+      ]);
     const firstError =
       inquiries.error ?? newInquiries.error ?? courses.error ?? activity.error ?? chats.error ?? posters.error;
     if (firstError) fail(firstError, "Could not load the dashboard counts");
-
-    const libraryCountRes = await sb
-      .from("inquiries")
-      .select("*", { count: "exact", head: true })
-      .or("preferred_course.ilike.%library%,preferred_course.ilike.%seat%,message.ilike.%shift%");
 
     return {
       inquiries: inquiries.count ?? 0,
@@ -953,24 +992,24 @@ function isTableMissing(error: any): boolean {
 }
 
 export async function getPublicPosters(): Promise<PosterDoc[]> {
-  const sb = getSupabase();
-  if (sb) {
-    const { data, error } = await sb
-      .from("posters")
-      .select("*")
-      .eq("is_active", true)
-      .order("sort_order", { ascending: true });
+  try {
+    const sb = getSupabase();
+    if (sb) {
+      const { data, error } = await sb
+        .from("posters")
+        .select("*")
+        .eq("is_active", true)
+        .order("sort_order", { ascending: true });
 
-    if (error) {
-      if (isTableMissing(error)) {
-        const list = (await readList<PosterDoc>(FILES.posters)) ?? [];
-        return list
-          .filter((p) => p.isActive)
-          .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+      if (!error && data) {
+        return data.map(rowToPoster);
       }
-      fail(error, "Could not fetch public posters");
+      if (error) {
+        console.warn("[Supabase] getPublicPosters error, using local fallback:", error.message);
+      }
     }
-    return (data ?? []).map(rowToPoster);
+  } catch (err: any) {
+    console.warn("[Supabase] getPublicPosters exception, using local fallback:", err?.message || err);
   }
 
   const list = (await readList<PosterDoc>(FILES.posters)) ?? [];

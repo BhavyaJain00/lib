@@ -5,12 +5,16 @@ import { DraggableFab } from "@/components/ui/draggable-fab";
 import { useRouteTransition } from "@/components/route-transition-provider";
 
 export function AdminFab() {
-  const { transitionTo } = useRouteTransition();
+  const { transitionTo, prefetch } = useRouteTransition();
 
   return (
     <DraggableFab className="admin-fab fixed bottom-20 right-6 z-40">
       <button
         type="button"
+        // /admin is force-dynamic and only ever wanted by staff, so it is not
+        // worth warming for every visitor on idle — start on intent instead.
+        onPointerEnter={() => prefetch("/admin")}
+        onFocus={() => prefetch("/admin")}
         onClick={() => transitionTo("/admin", "admin")}
         aria-label="Open admin panel"
         className="group flex h-10 w-10 sm:h-11 sm:w-11 cursor-pointer items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md shadow-primary/30 transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"

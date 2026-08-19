@@ -3,7 +3,6 @@
 import * as React from "react";
 import Link from "next/link";
 import { ArrowRight, Clock, Users, BookOpen, ChevronDown, ChevronUp } from "lucide-react";
-import { motion } from "framer-motion";
 import {
   Card,
   CardContent,
@@ -28,13 +27,7 @@ export function CoursesGrid({ courses }: { courses: Course[] }) {
         {displayedCourses.map((course) => {
           const Icon = getIcon(course.icon);
           return (
-            <motion.div
-              key={course.slug}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="flex"
-            >
+            <div key={course.slug} className="flex animate-fade-up">
               <Card className="group flex w-full flex-col transition-all duration-300 ease-out hover:-translate-y-2 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5">
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -93,7 +86,7 @@ export function CoursesGrid({ courses }: { courses: Course[] }) {
                   </div>
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
           );
         })}
       </div>

@@ -20,6 +20,15 @@ const globalForSupabase = globalThis as unknown as {
   _supabase?: SupabaseClient;
 };
 
+/**
+ * Ceiling on a single Supabase request. A healthy query answers in well under a
+ * second, so this only ever bites when the project is unreachable — and left
+ * unbounded that case stalls the render for however long the OS takes to give
+ * up on the connection. Pages feel it directly: the admin panel is
+ * force-dynamic, so every navigation into it re-runs these queries.
+ */
+const REQUEST_TIMEOUT_MS = 5000;
+
 /** Returns the Supabase client, or null when env vars are not set. */
 export function getSupabase(): SupabaseClient | null {
   if (!URL || !KEY) return null;
@@ -29,6 +38,19 @@ export function getSupabase(): SupabaseClient | null {
         // This is a server-side data client — no user sessions to persist.
         persistSession: false,
         autoRefreshToken: false,
+      },
+      global: {
+        fetch: (input, init) => {
+          const timeout = AbortSignal.timeout(REQUEST_TIMEOUT_MS);
+          return fetch(input, {
+            ...init,
+            // Keep whatever signal the caller (or Next) already passed —
+            // replacing it outright would break request cancellation.
+            signal: init?.signal
+              ? AbortSignal.any([init.signal, timeout])
+              : timeout,
+          });
+        },
       },
     });
   }

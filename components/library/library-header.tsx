@@ -23,7 +23,7 @@ const LIBRARY_NAV = [
 export function LibraryHeader() {
   const [open, setOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
-  const { transitionTo } = useRouteTransition();
+  const { transitionTo, prefetch } = useRouteTransition();
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -77,6 +77,8 @@ export function LibraryHeader() {
             type="button"
             variant="ghost"
             size="sm"
+            onPointerEnter={() => prefetch("/")}
+            onFocus={() => prefetch("/")}
             onClick={() => transitionTo("/", "computech")}
             className="hidden text-xs text-muted-foreground hover:text-foreground md:inline-flex cursor-pointer"
           >

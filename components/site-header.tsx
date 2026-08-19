@@ -16,7 +16,7 @@ import { useRouteTransition } from "@/components/route-transition-provider";
 export function SiteHeader() {
   const [open, setOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
-  const { transitionTo } = useRouteTransition();
+  const { transitionTo, prefetch } = useRouteTransition();
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -68,6 +68,8 @@ export function SiteHeader() {
           ))}
           <button
             type="button"
+            onPointerEnter={() => prefetch("/library")}
+            onFocus={() => prefetch("/library")}
             onClick={() => transitionTo("/library", "library")}
             className="ml-1.5 inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1.5 text-xs font-bold text-emerald-700 transition-all hover:scale-105 hover:bg-emerald-500/20 dark:text-emerald-300 shadow-sm"
           >

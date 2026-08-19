@@ -1,26 +1,18 @@
-"use client";
-
-import * as React from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { usePathname } from "next/navigation";
-
+/**
+ * PERF: unused — kept only so nothing breaks if an old import lingers, and
+ * should be DELETED along with app/template.tsx.
+ *
+ * The original wrapped every page in a Framer Motion `AnimatePresence` fade.
+ * That put framer-motion in every route's shared bundle, serialized
+ * `opacity: 0` into the SSR HTML (so first paint waited on hydration), and made
+ * every navigation sit through a 400ms exit animation whose `exit` variant
+ * could never actually run — Next.js destroys the old template instance on
+ * navigation. The route curtain in components/route-transition-provider.tsx
+ * covers the same ground in pure CSS.
+ *
+ * This replacement is a plain server-safe pass-through: no client boundary, no
+ * animation library, nothing in the SSR HTML that hides content.
+ */
 export function PageTransition({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-
-  return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={pathname}
-        initial={{ opacity: 0, y: 15, scale: 0.99 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: -15, scale: 0.99 }}
-        transition={{
-          duration: 0.4,
-          ease: [0.22, 1, 0.36, 1],
-        }}
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
-  );
+  return <>{children}</>;
 }

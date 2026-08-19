@@ -10,15 +10,13 @@ import { Inquiry } from "@/components/sections/inquiry";
 import { Contact } from "@/components/sections/contact";
 import { PostersSlider } from "@/components/sections/posters-slider";
 import { SiteFooter } from "@/components/site-footer";
-import { WhatsAppFab } from "@/components/whatsapp-fab";
-import { AdminFab } from "@/components/admin-fab";
 import { Chatbot } from "@/components/chatbot/chatbot";
-import { BackToTop } from "@/components/back-to-top";
+import { LazyHomeFabs } from "@/components/lazy-home-fabs";
 import { OrganizationJsonLd, FaqJsonLd } from "@/components/json-ld";
 import { getPublicCourses, getPublicPosters } from "@/lib/db";
 
-// Force dynamic rendering so admin course toggles take effect immediately.
-export const dynamic = "force-dynamic";
+// Revalidate static cache every 60 seconds (ISR) for instant TTFB & fast loads.
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -47,10 +45,8 @@ export default async function HomePage() {
         <Contact />
       </main>
       <SiteFooter />
-      <WhatsAppFab />
-      <AdminFab />
+      <LazyHomeFabs />
       <Chatbot />
-      <BackToTop />
     </>
   );
 }

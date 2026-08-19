@@ -9,6 +9,8 @@ const nextConfig = {
     "/**": ["./data/courses.json", "./data/posters.json"],
   },
   images: {
+    formats: ["image/avif", "image/webp"],
+    qualities: [75, 80, 85],
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "*.supabase.co" },

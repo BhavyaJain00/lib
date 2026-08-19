@@ -3,7 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   ChevronLeft,
   ChevronRight,
@@ -13,8 +13,6 @@ import {
   ExternalLink,
   Maximize2,
   X,
-  Volume2,
-  VolumeX,
 } from "lucide-react";
 import type { PosterDoc } from "@/lib/db";
 import { cn } from "@/lib/utils";
@@ -27,6 +25,10 @@ export function PostersSlider({ posters }: PostersSliderProps) {
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [isPaused, setIsPaused] = React.useState(false);
   const [lightboxPoster, setLightboxPoster] = React.useState<PosterDoc | null>(null);
+  // The carousel sits well below the fold; there is no point burning a render
+  // every 5s (plus an image swap) while nobody is looking at it.
+  const [isVisible, setIsVisible] = React.useState(false);
+  const sectionRef = React.useRef<HTMLElement>(null);
 
   const activePosters = React.useMemo(() => {
     return posters.filter((p) => p.isActive);
@@ -34,16 +36,27 @@ export function PostersSlider({ posters }: PostersSliderProps) {
 
   const count = activePosters.length;
 
-  // Auto-play timer (5 seconds)
   React.useEffect(() => {
-    if (count <= 1 || isPaused || lightboxPoster) return;
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { rootMargin: "128px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Auto-play timer (5 seconds) — only while on screen and not paused.
+  React.useEffect(() => {
+    if (count <= 1 || isPaused || lightboxPoster || !isVisible) return;
 
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % count);
     }, 5000);
 
     return () => clearInterval(timer);
-  }, [count, isPaused, lightboxPoster]);
+  }, [count, isPaused, lightboxPoster, isVisible]);
 
   if (count === 0) return null;
 
@@ -58,14 +71,18 @@ export function PostersSlider({ posters }: PostersSliderProps) {
   };
 
   return (
-    <section className="relative overflow-hidden py-12 md:py-16 bg-slate-950 text-white">
-      {/* Background Glows */}
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden py-12 md:py-16 bg-slate-950 text-white"
+    >
+      {/* Background Glows — radial gradients rather than blur() filters, which
+          would each force an oversized offscreen texture to raster. */}
       <div
-        className="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-blue-600/20 blur-[120px]"
+        className="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-[radial-gradient(closest-side,rgba(37,99,235,0.28),transparent)]"
         aria-hidden="true"
       />
       <div
-        className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-purple-600/20 blur-[120px]"
+        className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-[radial-gradient(closest-side,rgba(147,51,234,0.28),transparent)]"
         aria-hidden="true"
       />
 
@@ -129,7 +146,7 @@ export function PostersSlider({ posters }: PostersSliderProps) {
                     alt={currentPoster.title}
                     fill
                     priority
-                    unoptimized
+                    quality={80}
                     className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
                     sizes="(max-width: 1024px) 100vw, 58vw"
                   />
@@ -279,7 +296,7 @@ export function PostersSlider({ posters }: PostersSliderProps) {
                   src={lightboxPoster.imageUrl}
                   alt={lightboxPoster.title}
                   fill
-                  unoptimized
+                  quality={85}
                   className="object-contain"
                   sizes="100vw"
                 />
