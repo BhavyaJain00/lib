@@ -108,6 +108,10 @@ report.*.json
 !.vscode/extensions.json
 !.vscode/launch.json
 
+# Gemini / Antigravity IDE
+.gemini/
+
+
 # -----------------------------------------------------------------------------
 #  Operating system files
 # -----------------------------------------------------------------------------
